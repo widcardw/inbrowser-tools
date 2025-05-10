@@ -1,0 +1,32 @@
+---
+import ThemeIcon from './ThemeIcon.astro';
+---
+
+<header>
+  <div class="site-name"><a href="/" target="_self">In Browser Tools</a></div>
+  <div class="theme-switch">
+    <ThemeIcon />
+  </div>
+</header>
+
+<style>
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .site-name a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none !important;
+    color: hsl(var(--primary));
+  }
+
+  .theme-switch {
+    display: flex;
+    align-items: center;
+  }
+</style>

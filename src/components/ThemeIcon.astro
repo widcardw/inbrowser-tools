@@ -1,0 +1,21 @@
+---
+import { ThemeSwitch } from 'astro-color-scheme'
+---
+
+<ThemeSwitch strategy="select" defaultTheme="system">
+  <select class="theme-select">
+    <option value="system">System</option>
+    <option value="dark">Dark</option>
+    <option value="light">Light</option>
+  </select>
+</ThemeSwitch>
+
+<style>
+  .theme-select {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: transparent;
+  }
+</style>

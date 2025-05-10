@@ -9,6 +9,15 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.7.12"
+    "@astrojs/solid-js": "^5.0.10",
+    "astro": "^5.7.12",
+    "astro-color-scheme": "^1.1.5",
+    "solid-js": "^1.9.6"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@iconify-json/ri": "^1.2.5",
+    "@unocss/reset": "^66.1.1",
+    "unocss": "^66.1.1"
   }
 }

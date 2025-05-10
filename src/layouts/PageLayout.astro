@@ -1,0 +1,32 @@
+---
+import MainLayout from './MainLayout.astro';
+---
+
+<MainLayout>
+  <div class="content-wrapper">
+    <slot />
+  </div>
+</MainLayout>
+
+<style>
+  .content-wrapper {
+    /* 水平方向设置内边距，作为页面两边的间距 */
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    /* 限制最大宽度，避免内容在大屏幕过于分散 */
+    max-width: 1000px;
+    /* 水平居中 */
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media (max-width: 768px) {
+    .content-wrapper {
+      /* 在小屏幕上减小间距 */
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+</style>

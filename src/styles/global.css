@@ -1,0 +1,143 @@
+/* 定义亮色模式变量 */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+
+  --secondary: 206, 21%, 61%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+
+  --muted: 210, 2%, 41%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+
+  --accent: 207, 62%, 44%;
+  --accent-foreground: 210 40% 98%;
+}
+
+/* 定义暗色模式变量 */
+[data-theme="dark"] {
+  --background: 222, 21%, 12%;
+  --foreground: 210 40% 98%;
+
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+
+  --secondary: 210, 27%, 22%;
+  --secondary-foreground: 210 40% 98%;
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+
+  --muted: 220, 3%, 55%;
+  --muted-foreground: 215 20.2% 65.1%;
+
+  --accent: 207, 73%, 58%;
+  --accent-foreground: 210 40% 98%;
+}
+
+/* 基础样式 */
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: 'DM Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: hsl(var(--accent));
+  /* 默认虚下划线，0.5px 粗细 */
+  text-decoration: underline dashed 0.5px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  /* 鼠标悬停时变成实下划线 */
+  text-decoration: underline solid 0.5px;
+}
+
+
+/* input 基础样式 */
+input[type="text"] {
+  background-color: transparent;
+  border: 2px solid hsl(var(--secondary));
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+  font-size: 1rem;
+  color: hsl(var(--foreground));
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* input 聚焦状态 */
+input[type="text"]:focus {
+  outline: none;
+  border-color: hsl(var(--accent));
+  box-shadow: 0 0 0 2px hsla(var(--accent), 0.2);
+}
+
+/* input 禁用状态 */
+input[type="text"]:disabled {
+  border-color: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+  cursor: not-allowed;
+}
+
+/* 暗色模式下的 input 样式 */
+[data-theme="dark"] input[type="text"] {
+  border-color: hsl(var(--secondary));
+}
+
+[data-theme="dark"] input[type="text"]:focus {
+  border-color: hsl(var(--accent));
+  box-shadow: 0 0 0 2px hsla(var(--accent), 0.4);
+}
+
+
+/* h1 - h6 基础样式 */
+h1, h2, h3, h4, h5, h6 {
+  font-family: inherit;
+  color: hsl(var(--foreground));
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 2.5rem; /* 40px */
+}
+
+h2 {
+  font-size: 2rem; /* 32px */
+}
+
+h3 {
+  font-size: 1.75rem; /* 28px */
+}
+
+h4 {
+  font-size: 1.5rem; /* 24px */
+}
+
+h5 {
+  font-size: 1.25rem; /* 20px */
+}
+
+h6 {
+  font-size: 1rem; /* 16px */
+}
+
+/* 暗色模式下的 h1 - h6 样式微调 */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+  color: hsl(var(--foreground));
+}

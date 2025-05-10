@@ -1,0 +1,84 @@
+.color-converter {
+  margin: 0 auto;
+}
+
+.conversion-row {
+  margin-bottom: 20px;
+}
+
+.input-group {
+  flex: 1;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.input-with-copy {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-with-copy input {
+  flex: 1;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.input-with-copy button {
+  width: 5rem;
+  padding: 8px 12px;
+  border: none;
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.input-with-copy button:hover {
+  background-color: hsla(var(--accent), 0.8);
+}
+
+.input-group input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.slider-group label {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.slider-group input[type="range"] {
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+.slider-group span {
+  margin-left: 1rem;
+}
+
+.color-picker {
+  width: 100%; /* 让颜色选择器充满整个宽度 */
+  height: 40px; /* 设置高度，可按需调整 */
+  padding: 2px; /* 添加内边距 */
+  /* border: 2px solid hsl(var(--secondary)); 添加边框 */
+  border-radius: 4px; /* 设置圆角 */
+  cursor: pointer; /* 鼠标悬停时显示手型光标 */
+  transition: border-color 0.3s ease; /* 添加边框颜色过渡效果 */
+}
+
+.color-picker:hover {
+  border-color: hsl(var(--accent)); /* 鼠标悬停时改变边框颜色 */
+}
+
+.color-picker:focus {
+  outline: none; /* 移除默认聚焦轮廓 */
+  border-color: hsl(var(--accent)); /* 聚焦时改变边框颜色 */
+  box-shadow: 0 0 0 2px hsla(var(--accent), 0.2); /* 添加聚焦阴影 */
+}
