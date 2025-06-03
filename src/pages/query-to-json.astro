@@ -1,0 +1,297 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+---
+
+<PageLayout title="查询参数转 JSON">
+  <div class="container">
+    <h1>查询参数转 JSON</h1>
+    <p class="description">
+      将 URL 查询参数或查询字符串转换为 JSON 对象格式。支持嵌套参数解析。
+    </p>
+
+    <div class="input-section">
+      <label for="input-text">输入 URL 或查询参数：</label>
+      <div class="input-wrapper">
+        <input
+          type="text"
+          id="input-text"
+          placeholder="输入完整 URL 或查询参数字符串（如：key1=value1&key2=value2）"
+        />
+        <button id="parse-btn" class="btn primary">转换</button>
+      </div>
+      <div class="examples">
+        <p>示例：</p>
+        <button class="example-btn" data-example="https://example.com?name=John&age=25">示例 URL</button>
+        <button class="example-btn" data-example="name=John&age=25&colors[]=red&colors[]=blue&user[name]=Tom&user[age]=20">示例查询字符串</button>
+      </div>
+    </div>
+
+    <div class="output-section">
+      <div class="output-header">
+        <label for="output-text">JSON 结果：</label>
+        <button id="copy-btn" class="btn">复制</button>
+      </div>
+      <pre id="output-text" class="output"></pre>
+    </div>
+  </div>
+</PageLayout>
+
+<script>
+  // 获取 DOM 元素
+  const inputText = document.getElementById('input-text') as HTMLInputElement;
+  const outputText = document.getElementById('output-text') as HTMLPreElement;
+  const parseBtn = document.getElementById('parse-btn') as HTMLButtonElement;
+  const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement;
+  const exampleBtns = document.querySelectorAll('.example-btn');
+
+  // 解析查询字符串为对象的函数
+  function parseQueryString(queryString: string) {
+    // 移除 URL 中的其他部分，只保留查询参数
+    const searchParams = queryString.includes('?') 
+      ? queryString.split('?')[1]
+      : queryString;
+
+    const params: Record<string, any> = {};
+
+    // 如果没有查询参数，返回空对象
+    if (!searchParams) {
+      return params;
+    }
+
+    // 解析查询参数
+    const decode = (str: string) => decodeURIComponent(str.replace(/\+/g, ' '));
+
+    searchParams.split('&').forEach(param => {
+      if (!param) return;
+      
+      let [key, value] = param.split('=').map(decode);
+      
+      // 处理数组语法 colors[]=red
+      if (key.endsWith('[]')) {
+        key = key.slice(0, -2);
+        if (!params[key]) {
+          params[key] = [];
+        }
+        params[key].push(value);
+        return;
+      }
+
+      // 处理嵌套对象语法 user[name]=Tom
+      const matches = key.match(/^([^\[]+)\[([^\]]*)\]$/);
+      if (matches) {
+        const [, objKey, propKey] = matches;
+        if (!params[objKey]) {
+          params[objKey] = {};
+        }
+        if (propKey) {
+          params[objKey][propKey] = value;
+        } else {
+          if (!Array.isArray(params[objKey])) {
+            params[objKey] = [];
+          }
+          params[objKey].push(value);
+        }
+        return;
+      }
+
+      // 普通键值对
+      params[key] = value;
+    });
+
+    return params;
+  }
+
+  // 转换按钮点击事件
+  parseBtn.addEventListener('click', () => {
+    try {
+      const input = inputText.value.trim();
+      if (!input) {
+        outputText.textContent = '请输入 URL 或查询参数';
+        outputText.classList.add('error');
+        return;
+      }
+
+      const result = parseQueryString(input);
+      outputText.textContent = JSON.stringify(result, null, 2);
+      outputText.classList.remove('error');
+    } catch (error) {
+      outputText.textContent = `解析错误: ${error}`;
+      outputText.classList.add('error');
+    }
+  });
+
+  // 复制按钮点击事件
+  copyBtn.addEventListener('click', () => {
+    const text = outputText.textContent;
+    if (!text) return;
+
+    navigator.clipboard.writeText(text).then(() => {
+      const originalText = copyBtn.textContent;
+      copyBtn.textContent = '已复制!';
+      setTimeout(() => {
+        copyBtn.textContent = originalText;
+      }, 1500);
+    });
+  });
+
+  // 示例按钮点击事件
+  exampleBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const example = (btn as HTMLButtonElement).dataset.example;
+      if (example) {
+        inputText.value = example;
+        parseBtn.click();
+      }
+    });
+  });
+
+  // 支持按回车键转换
+  inputText.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      parseBtn.click();
+    }
+  });
+</script>
+
+<style>
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .description {
+    color: var(--muted-foreground);
+    margin-bottom: 2rem;
+  }
+
+  .input-section,
+  .output-section {
+    margin-bottom: 2rem;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .input-wrapper {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  input[type="text"] {
+    flex: 1;
+    padding: 0.75rem;
+    border: 2px solid hsl(var(--secondary));
+    border-radius: 4px;
+    background-color: transparent;
+    color: var(--color-text);
+    font-family: monospace;
+    font-size: 1rem;
+  }
+
+  input[type="text"]:focus {
+    outline: none;
+    border-color: hsl(var(--accent));
+    box-shadow: 0 0 0 2px hsla(var(--accent), 0.2);
+  }
+
+  .examples {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .examples p {
+    margin: 0;
+    color: var(--muted-foreground);
+  }
+
+  .example-btn {
+    padding: 0.3rem 0.6rem;
+    border: 1px solid hsl(var(--secondary));
+    border-radius: 4px;
+    background: transparent;
+    color: var(--color-text);
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+
+  .example-btn:hover {
+    background-color: var(--color-hover);
+  }
+
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .output {
+    width: 100%;
+    min-height: 200px;
+    padding: 1rem;
+    border-radius: 4px;
+    background-color: hsla(var(--secondary), 0.1);
+    color: var(--color-text);
+    font-family: monospace;
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin: 0;
+  }
+
+  .output.error {
+    color: hsl(var(--destructive));
+  }
+
+  .btn {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 4px;
+    background-color: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    white-space: nowrap;
+  }
+
+  .btn:hover {
+    background-color: hsla(var(--secondary), 0.8);
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  .btn.primary {
+    background-color: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+  }
+
+  .btn.primary:hover {
+    background-color: hsla(var(--accent), 0.9);
+  }
+
+  @media (max-width: 768px) {
+    .input-wrapper {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+    }
+
+    .examples {
+      gap: 0.5rem;
+    }
+
+    .example-btn {
+      font-size: 0.75rem;
+    }
+  }
+</style>

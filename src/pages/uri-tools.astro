@@ -1,0 +1,183 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+---
+
+<PageLayout title="URI 编码/解码工具">
+  <div class="container">
+    <h1>URI 编码/解码工具</h1>
+    <p class="description">
+      将文本转换为 URI 编码格式或将 URI 编码解码为普通文本。
+    </p>
+
+    <div class="input-section">
+      <label for="input-text">输入文本：</label>
+      <textarea
+        id="input-text"
+        placeholder="输入要编码或解码的文本..."
+        rows="5"
+      ></textarea>
+    </div>
+
+    <div class="buttons">
+      <button id="encode-btn" class="btn primary">编码</button>
+      <button id="decode-btn" class="btn primary">解码</button>
+      <button id="copy-btn" class="btn">复制结果</button>
+      <button id="clear-btn" class="btn">清空</button>
+    </div>
+
+    <div class="output-section">
+      <label for="output-text">结果：</label>
+      <textarea id="output-text" readonly rows="5"></textarea>
+    </div>
+  </div>
+</PageLayout>
+
+<script>
+  // 获取DOM元素
+  const inputText = document.getElementById('input-text') as HTMLTextAreaElement;
+  const outputText = document.getElementById('output-text') as HTMLTextAreaElement;
+  const encodeBtn = document.getElementById('encode-btn') as HTMLButtonElement;
+  const decodeBtn = document.getElementById('decode-btn') as HTMLButtonElement;
+  const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement;
+  const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
+
+  // 编码功能
+  encodeBtn.addEventListener('click', () => {
+    try {
+      const input = inputText.value;
+      const encoded = encodeURIComponent(input);
+      outputText.value = encoded;
+    } catch (error) {
+      outputText.value = `编码错误: ${error}`;
+    }
+  });
+
+  // 解码功能
+  decodeBtn.addEventListener('click', () => {
+    try {
+      const input = inputText.value;
+      const decoded = decodeURIComponent(input);
+      outputText.value = decoded;
+    } catch (error) {
+      outputText.value = `解码错误: ${error}`;
+    }
+  });
+
+  // 复制结果
+  copyBtn.addEventListener('click', () => {
+    outputText.select();
+    document.execCommand('copy');
+    
+    // 显示复制成功提示
+    const originalText = copyBtn.textContent;
+    copyBtn.textContent = '已复制!';
+    setTimeout(() => {
+      copyBtn.textContent = originalText;
+    }, 1500);
+  });
+
+  // 清空输入和输出
+  clearBtn.addEventListener('click', () => {
+    inputText.value = '';
+    outputText.value = '';
+    inputText.focus();
+  });
+</script>
+
+<style>
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .description {
+    color: var(--muted-foreground);
+    margin-bottom: 2rem;
+  }
+
+  .input-section,
+  .output-section {
+    margin-bottom: 1.5rem;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid hsl(var(--secondary));
+    border-radius: 4px;
+    background-color: transparent;
+    color: var(--color-text);
+    font-family: monospace;
+    font-size: 1rem;
+    resize: vertical;
+  }
+
+  textarea:focus {
+    outline: none;
+    border-color: hsl(var(--accent));
+    box-shadow: 0 0 0 2px hsla(var(--accent), 0.2);
+  }
+
+  textarea[readonly] {
+    background-color: hsla(var(--secondary), 0.1);
+  }
+
+  .buttons {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 4px;
+    background-color: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+  }
+
+  .btn:hover {
+    background-color: hsl(var(--secondary) / 0.8);
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  .btn.primary {
+    background-color: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+  }
+
+  .btn.primary:hover {
+    background-color: hsl(var(--accent) / 0.9);
+  }
+
+  .btn.secondary {
+    background-color: hsl(var(--secondary) / 0.7);
+  }
+
+  .btn.secondary:hover {
+    background-color: hsl(var(--secondary) / 0.6);
+  }
+
+  @media (max-width: 768px) {
+    .buttons {
+      flex-direction: column;
+    }
+    
+    .btn {
+      width: 100%;
+    }
+  }
+</style>

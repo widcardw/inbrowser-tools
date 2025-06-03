@@ -1,0 +1,68 @@
+---
+const navItems = [
+  { href: '/', text: '首页' },
+  { href: '/colors', text: '颜色转换' },
+  { href: '/uri-tools', text: 'URI 编码/解码' },
+  { href: '/query-to-json', text: '查询参数转 JSON' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<aside class="sidebar">
+  <nav class="nav-menu">
+    {
+      navItems.map(({ href, text }) => (
+        <a
+          href={href}
+          class:list={[
+            'nav-item',
+            { active: currentPath === href || (href !== '/' && currentPath.startsWith(href)) },
+          ]}
+        >
+          {text}
+        </a>
+      ))
+    }
+  </nav>
+</aside>
+
+<style>
+  .sidebar {
+    width: 200px;
+    background-color: var(--color-bg);
+    border-right: 1px solid var(--color-border);
+    padding: 1rem;
+    overflow-y: auto; /* 内容过多时可滚动 */
+  }
+
+  .nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .nav-item {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+
+  .nav-item:hover {
+    background-color: var(--color-hover);
+  }
+
+  .nav-item.active {
+    background-color: var(--color-active);
+    font-weight: 500;
+  }
+
+  /* 响应式设计 */
+  @media (max-width: 768px) {
+    .sidebar {
+      display: none; /* 在移动设备上隐藏侧边栏 */
+    }
+  }
+</style>

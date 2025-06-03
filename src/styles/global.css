@@ -1,6 +1,7 @@
 /* 定义亮色模式变量 */
 :root {
   --background: 0 0% 100%;
+  --bg-secondary: 0, 0%, 84%;
   --foreground: 222.2 84% 4.9%;
 
   --primary: 222.2 47.4% 11.2%;
@@ -16,12 +17,21 @@
   --muted-foreground: 215.4 16.3% 46.9%;
 
   --accent: 207, 62%, 44%;
+  --accent-active: 207, 63%, 38%;
   --accent-foreground: 210 40% 98%;
+
+  /* 侧边栏变量 */
+  --color-bg: hsl(var(--background));
+  --color-border: hsl(var(--bg-secondary));
+  --color-text: hsl(var(--foreground));
+  --color-hover: hsl(var(--accent-active));
+  --color-active: hsl(var(--accent));
 }
 
 /* 定义暗色模式变量 */
 [data-theme="dark"] {
   --background: 222, 21%, 12%;
+  --bg-secondary: 222, 21%, 24%;
   --foreground: 210 40% 98%;
 
   --primary: 210 40% 98%;
@@ -37,6 +47,7 @@
   --muted-foreground: 215 20.2% 65.1%;
 
   --accent: 207, 73%, 58%;
+  --accent-active: 207, 83%, 62%;
   --accent-foreground: 210 40% 98%;
 }
 
