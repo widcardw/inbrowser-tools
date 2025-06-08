@@ -1,0 +1,250 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import '../styles/tools-common.css';
+---
+
+<PageLayout title="字符转义工具">
+  <div class="container">
+    <h1>字符转义工具</h1>
+    <p class="description">
+      在转义字符（如 \n, \t, \r）和实际显示效果之间转换。帮助你处理字符串中的特殊字符。
+    </p>
+
+    <div class="input-section">
+      <label for="input-text">输入文本：</label>
+      <textarea
+        id="input-text"
+        class="text-input"
+        placeholder="输入要转换的文本..."
+        rows="8"
+      ></textarea>
+    </div>
+
+    <div class="buttons">
+      <button id="escape-btn" class="btn primary convert-btn" title="转换为转义形式">
+        <div class="i-ri-text-wrap"></div>
+        <div class="i-ri-arrow-right-line"></div>
+        <span class="icon-text">\n</span>
+      </button>
+      <button id="unescape-btn" class="btn primary convert-btn" title="转换为实际显示">
+        <span class="icon-text">\n</span>
+        <div class="i-ri-arrow-right-line"></div>
+        <div class="i-ri-text-wrap"></div>
+      </button>
+      <button id="copy-btn" class="btn">复制结果</button>
+      <button id="clear-btn" class="btn">清空</button>
+    </div>
+
+    <div class="output-section">
+      <label for="output-text">转换结果：</label>
+      <textarea
+        id="output-text"
+        class="text-input readonly"
+        readonly
+        rows="8"
+      ></textarea>
+    </div>
+
+    <div class="examples">
+      <h3>常见转义字符参考：</h3>
+      <div class="escape-table">
+        <div class="table-row header">
+          <span>转义形式</span>
+          <span>说明</span>
+          <span>实际效果</span>
+        </div>
+        <div class="table-row">
+          <code>\n</code>
+          <span>换行符</span>
+          <span class="preview">行1↵行2</span>
+        </div>
+        <div class="table-row">
+          <code>\t</code>
+          <span>制表符</span>
+          <span class="preview">文本→    文本</span>
+        </div>
+        <div class="table-row">
+          <code>\r</code>
+          <span>回车符</span>
+          <span class="preview">行1⏎行2</span>
+        </div>
+        <div class="table-row">
+          <code>\\</code>
+          <span>反斜杠</span>
+          <span class="preview">\</span>
+        </div>
+        <div class="table-row">
+          <code>\"</code>
+          <span>双引号</span>
+          <span class="preview">"</span>
+        </div>
+        <div class="table-row">
+          <code>\'</code>
+          <span>单引号</span>
+          <span class="preview">'</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</PageLayout>
+
+<script>
+  // 获取 DOM 元素
+  const inputText = document.getElementById('input-text') as HTMLTextAreaElement;
+  const outputText = document.getElementById('output-text') as HTMLTextAreaElement;
+  const escapeBtn = document.getElementById('escape-btn') as HTMLButtonElement;
+  const unescapeBtn = document.getElementById('unescape-btn') as HTMLButtonElement;
+  const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement;
+  const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
+
+  // 转义函数
+  function escapeText(text: string): string {
+    return text
+      .replace(/\\/g, '\\\\') // 必须先处理反斜杠
+      .replace(/\n/g, '\\n')
+      .replace(/\r/g, '\\r')
+      .replace(/\t/g, '\\t')
+      .replace(/"/g, '\\"')
+      .replace(/'/g, "\\'");
+  }
+
+  // 反转义函数
+  function unescapeText(text: string): string {
+    return text
+      .replace(/\\n/g, '\n')
+      .replace(/\\r/g, '\r')
+      .replace(/\\t/g, '\t')
+      .replace(/\\"/g, '"')
+      .replace(/\\'/g, "'")
+      .replace(/\\\\/g, '\\');
+  }
+
+  // 转义按钮点击事件
+  escapeBtn.addEventListener('click', () => {
+    try {
+      const input = inputText.value;
+      const escaped = escapeText(input);
+      outputText.value = escaped;
+      outputText.classList.remove('error');
+    } catch (error) {
+      outputText.value = `转换错误: ${error}`;
+      outputText.classList.add('error');
+    }
+  });
+
+  // 反转义按钮点击事件
+  unescapeBtn.addEventListener('click', () => {
+    try {
+      const input = inputText.value;
+      const unescaped = unescapeText(input);
+      outputText.value = unescaped;
+      outputText.classList.remove('error');
+    } catch (error) {
+      outputText.value = `转换错误: ${error}`;
+      outputText.classList.add('error');
+    }
+  });
+
+  // 复制按钮点击事件
+  copyBtn.addEventListener('click', () => {
+    outputText.select();
+    document.execCommand('copy');
+    
+    const originalText = copyBtn.textContent;
+    copyBtn.textContent = '已复制!';
+    setTimeout(() => {
+      copyBtn.textContent = originalText;
+    }, 1500);
+  });
+
+  // 清空按钮点击事件
+  clearBtn.addEventListener('click', () => {
+    inputText.value = '';
+    outputText.value = '';
+    inputText.focus();
+  });
+
+  // 支持按 Ctrl+Enter 或 Cmd+Enter 快速转换（使用最后一次点击的转换按钮）
+  let lastClickedBtn = escapeBtn;
+  escapeBtn.addEventListener('click', () => lastClickedBtn = escapeBtn);
+  unescapeBtn.addEventListener('click', () => lastClickedBtn = unescapeBtn);
+
+  inputText.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      lastClickedBtn.click();
+    }
+  });
+</script>
+
+<style>
+  /* 页面特定样式 */
+  .convert-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .icon-text {
+    font-family: monospace;
+  }
+
+  .text-input.readonly {
+    background-color: hsla(var(--secondary), 0.1);
+  }
+
+  .examples {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: hsla(var(--secondary), 0.1);
+  }
+
+  .examples h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+  }
+
+  .escape-table {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .table-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 1fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 4px;
+  }
+
+  .table-row:not(.header):hover {
+    background-color: hsla(var(--secondary), 0.1);
+  }
+
+  .table-row.header {
+    font-weight: 500;
+    color: var(--muted-foreground);
+  }
+
+  .table-row code {
+    font-family: monospace;
+    padding: 0.2rem 0.4rem;
+    background-color: hsla(var(--secondary), 0.2);
+    border-radius: 4px;
+  }
+
+  .table-row .preview {
+    font-family: monospace;
+    white-space: pre;
+  }
+
+  @media (max-width: 768px) {
+    .table-row {
+      grid-template-columns: 80px 1fr 1fr;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+  }
+</style>

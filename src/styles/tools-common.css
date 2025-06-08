@@ -1,0 +1,108 @@
+/* 容器样式 */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* 描述文本样式 */
+.description {
+  color: var(--muted-foreground);
+  margin-bottom: 2rem;
+}
+
+/* 区域样式 */
+.input-section,
+.output-section {
+  margin-bottom: 1.5rem;
+}
+
+/* 标签样式 */
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+/* 文本输入框样式 */
+.text-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid hsl(var(--secondary));
+  border-radius: 4px;
+  background-color: transparent;
+  color: var(--color-text);
+  font-family: monospace;
+  font-size: 1rem;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: hsl(var(--accent));
+  box-shadow: 0 0 0 2px hsla(var(--accent), 0.2);
+}
+
+/* 输出区域样式 */
+.output {
+  width: 100%;
+  min-height: 200px;
+  padding: 1rem;
+  border-radius: 4px;
+  background-color: hsla(var(--secondary), 0.1);
+  color: var(--color-text);
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0;
+}
+
+.output.error {
+  color: hsl(var(--destructive));
+}
+
+/* 按钮组样式 */
+.buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+/* 按钮基础样式 */
+.btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background-color: hsla(var(--secondary), 0.8);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn.primary {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+.btn.primary:hover {
+  background-color: hsla(var(--accent), 0.9);
+}
+
+/* 响应式样式 */
+@media (max-width: 768px) {
+  .buttons {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

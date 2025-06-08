@@ -1,0 +1,287 @@
+---
+import PageLayout from '../layouts/PageLayout.astro'
+import '../styles/tools-common.css'
+---
+
+<PageLayout title="JSON 格式化工具">
+  <div class="container">
+    <h1>JSON 格式化工具</h1>
+    <p class="description">
+      格式化、美化和验证 JSON 数据，支持自定义缩进和转义符处理。
+    </p>
+
+    <div class="input-section">
+      <label for="input-json">输入 JSON：</label>
+      <textarea
+        id="input-json"
+        class="text-input"
+        placeholder='在此粘贴 JSON 数据，例如：{"name":"John","age":30,"isActive":true}'
+        rows="8"
+      ></textarea>
+    </div>
+
+    <div class="options-section">
+      <div class="option-group">
+        <label>缩进选项：</label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="indent" value="0" />
+            无缩进
+          </label>
+          <label>
+            <input type="radio" name="indent" value="2" checked />
+            2 空格
+          </label>
+          <label>
+            <input type="radio" name="indent" value="4" />
+            4 空格
+          </label>
+        </div>
+      </div>
+
+      <div class="option-group">
+        <label>其他选项：</label>
+        <div class="checkbox-group">
+          <label>
+            <input type="checkbox" id="unescape" checked />
+            去除转义符
+          </label>
+          <label>
+            <input type="checkbox" id="sort-keys" />
+            按键名排序
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button id="format-btn" class="btn primary">格式化</button>
+      <button id="copy-btn" class="btn">复制结果</button>
+      <button id="clear-btn" class="btn">清空</button>
+    </div>
+
+    <div class="output-section">
+      <label for="output-json">格式化结果：</label>
+      <pre id="output-json" class="output"></pre>
+    </div>
+  </div>
+</PageLayout>
+
+<script>
+  // 获取 DOM 元素
+  const inputJson = document.getElementById('input-json') as HTMLTextAreaElement;
+  const outputJson = document.getElementById('output-json') as HTMLPreElement;
+  const formatBtn = document.getElementById('format-btn') as HTMLButtonElement;
+  const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement;
+  const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
+  const unescapeCheckbox = document.getElementById('unescape') as HTMLInputElement;
+  const sortKeysCheckbox = document.getElementById('sort-keys') as HTMLInputElement;
+  const indentRadios = document.querySelectorAll('input[name="indent"]') as NodeListOf<HTMLInputElement>;
+
+  // 格式化 JSON
+  formatBtn.addEventListener('click', () => {
+    try {
+      let jsonStr = inputJson.value.trim();
+      
+      if (!jsonStr) {
+        outputJson.textContent = '请输入 JSON 数据';
+        outputJson.classList.add('error');
+        return;
+      }
+
+      // 解析 JSON
+      let jsonObj;
+      try {
+        jsonObj = JSON.parse(jsonStr);
+      } catch (e) {
+        outputJson.textContent = `JSON 解析错误: ${e}`;
+        outputJson.classList.add('error');
+        return;
+      }
+
+      // 获取缩进选项
+      let indent = 2; // 默认值
+      for (const radio of indentRadios) {
+        if (radio.checked) {
+          indent = parseInt(radio.value);
+          break;
+        }
+      }
+
+      // 按键名排序
+      if (sortKeysCheckbox.checked) {
+        jsonObj = sortObjectKeys(jsonObj);
+      }
+
+      // 格式化 JSON
+      let formattedJson = JSON.stringify(jsonObj, null, indent);
+      
+      // 去除转义符
+      if (unescapeCheckbox.checked) {
+        formattedJson = unescapeJson(formattedJson);
+      }
+
+      // 显示结果
+      outputJson.textContent = formattedJson;
+      outputJson.classList.remove('error');
+    } catch (error) {
+      outputJson.textContent = `处理错误: ${error}`;
+      outputJson.classList.add('error');
+    }
+  });
+
+  // 复制结果
+  copyBtn.addEventListener('click', () => {
+    const text = outputJson.textContent;
+    if (!text || outputJson.classList.contains('error')) return;
+
+    navigator.clipboard.writeText(text).then(() => {
+      const originalText = copyBtn.textContent;
+      copyBtn.textContent = '已复制!';
+      setTimeout(() => {
+        copyBtn.textContent = originalText;
+      }, 1500);
+    });
+  });
+
+  // 清空输入和输出
+  clearBtn.addEventListener('click', () => {
+    inputJson.value = '';
+    outputJson.textContent = '';
+    inputJson.focus();
+  });
+
+  // 按键名排序函数
+  function sortObjectKeys(obj: any): any {
+    if (obj === null || typeof obj !== 'object') {
+      return obj;
+    }
+
+    if (Array.isArray(obj)) {
+      return obj.map(item => sortObjectKeys(item));
+    }
+
+    const sortedObj: Record<string, any> = {};
+    const keys = Object.keys(obj).sort();
+    
+    for (const key of keys) {
+      sortedObj[key] = sortObjectKeys(obj[key]);
+    }
+    
+    return sortedObj;
+  }
+
+  // 去除转义符函数
+  function unescapeJson(json: string): string {
+    return json
+      .replace(/\\"/g, '"')
+      .replace(/\\\\n/g, '\\n')
+      .replace(/\\\\r/g, '\\r')
+      .replace(/\\\\t/g, '\\t')
+      .replace(/\\\\/g, '\\');
+  }
+
+  // 支持按 Ctrl+Enter 或 Cmd+Enter 快速格式化
+  inputJson.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      formatBtn.click();
+    }
+  });
+
+  // // 示例 JSON 数据
+  // const exampleJson = {
+  //   "name": "John Doe",
+  //   "age": 30,
+  //   "isActive": true,
+  //   "address": {
+  //     "street": "123 Main St",
+  //     "city": "New York",
+  //     "zipCode": "10001"
+  //   },
+  //   "phoneNumbers": [
+  //     {
+  //       "type": "home",
+  //       "number": "212-555-1234"
+  //     },
+  //     {
+  //       "type": "work",
+  //       "number": "646-555-5678"
+  //     }
+  //   ],
+  //   "notes": "这是一个包含\"引号\"和转义字符\\n的示例"
+  // };
+
+  // 添加示例按钮
+  // const optionsSection = document.querySelector('.options-section');
+  // const exampleBtn = document.createElement('button');
+  // exampleBtn.textContent = '加载示例';
+  // exampleBtn.className = 'btn example-btn';
+  // exampleBtn.addEventListener('click', () => {
+  //   inputJson.value = JSON.stringify(exampleJson);
+  //   formatBtn.click();
+  // });
+  // optionsSection.appendChild(exampleBtn);
+</script>
+
+<style>
+  /* 页面特定样式 */
+  .options-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  .option-group {
+    margin-bottom: 1rem;
+  }
+
+  .radio-group,
+  .checkbox-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .radio-group label,
+  .checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: normal;
+    cursor: pointer;
+  }
+
+  .example-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.875rem;
+  }
+
+  .text-input {
+    resize: vertical;
+  }
+
+  @media (max-width: 768px) {
+    .options-section {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .radio-group,
+    .checkbox-group {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .example-btn {
+      position: static;
+      margin-top: 1rem;
+      width: 100%;
+    }
+  }
+</style>
