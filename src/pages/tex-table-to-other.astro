@@ -1,0 +1,324 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+import "../styles/tools-common.css";
+---
+
+<PageLayout title="LaTeX 表格转换工具">
+  <div class="container">
+    <h1>LaTeX 表格转换工具</h1>
+    <p class="description">
+      将简单的 LaTeX 表格转换为 CSV、HTML 表格或 Markdown 表格（不支持合并单元格的表格）。
+    </p>
+
+    <div class="input-section">
+      <label for="latex-input">输入 LaTeX 表格：</label>
+      <textarea
+        id="latex-input"
+        class="text-input"
+        placeholder="在此粘贴 LaTeX 表格内容..."
+        rows="8"></textarea>
+    </div>
+
+    <div class="input-section">
+      <p>选择输出格式：</p>
+      <div class="examples">
+        <label class="example-btn">
+          <input
+            type="radio"
+            id="output-fmt-csv"
+            name="output-fmt"
+            value="csv"
+            checked
+          /> CSV
+        </label>
+        <label class="example-btn">
+          <input
+            type="radio"
+            id="output-fmt-html"
+            name="output-fmt"
+            value="html"
+          /> HTML 表格
+        </label>
+        <label class="example-btn">
+          <input
+            type="radio"
+            id="output-fmt-md"
+            name="output-fmt"
+            value="markdown"
+          /> Markdown 表格
+        </label>
+      </div>
+    </div>
+
+    <div class="output-section">
+      <div class="output-header">
+        <label for="output">转换结果：</label>
+        <button id="copy-btn" class="btn">复制</button>
+      </div>
+      <pre id="output" class="output"></pre>
+    </div>
+  </div>
+</PageLayout>
+
+<script>
+  import { navigate } from "astro:transitions/client";
+
+  // 获取 DOM 元素
+  const latexInput = document.getElementById(
+    "latex-input",
+  ) as HTMLTextAreaElement;
+  const output = document.getElementById("output") as HTMLPreElement;
+  const copyBtn = document.getElementById("copy-btn") as HTMLButtonElement;
+  const formatRadios = document.querySelectorAll('input[name="output-fmt"]');
+
+  interface TexStringToMatrixConfig {
+    trimText: boolean;
+    trimBf: boolean;
+    trimIt: boolean;
+    trimUnderline: boolean;
+  }
+
+  function texStringToMatrix(
+    input: string,
+    config: TexStringToMatrixConfig,
+  ): string[][] {
+    let cleanedInput = input.replace(/%.*$/gm, "").trim();
+    // const match = cleanedInput.match(
+    //   /(\\begin\{tabular\}\{.*?\})?(.*)(\\end\{tabular\})?/s,
+    // );
+
+    const matchLeading = cleanedInput.match(/\\begin\{tabular\}\{.*?\}/s)
+    let leadingIdx = 0
+    if (matchLeading) {
+      leadingIdx = cleanedInput.indexOf(matchLeading[0]) + matchLeading[0].length + 1
+    }
+    const matchTrailing = cleanedInput.match(/\\end\{tabular\}/s)
+    let trailingIdx = cleanedInput.length
+    if (matchTrailing) {
+      trailingIdx = cleanedInput.indexOf(matchTrailing[0])
+    }
+    let tableContent = cleanedInput.slice(leadingIdx, trailingIdx);
+    
+    // let tableContent = match[2].trim();
+    if (config.trimText ?? true)
+      tableContent = tableContent.replace(/\\text\{(.*?)\}/g, "$1");
+
+    if (config.trimBf ?? true)
+      tableContent = tableContent.replace(/\\textbf\{(.*?)\}/g, "$1");
+
+    if (config.trimIt ?? true)
+      tableContent = tableContent.replace(/\\textit\{(.*?)\}/g, "$1");
+
+    if (config.trimUnderline ?? true)
+      tableContent = tableContent.replace(/\\underline\{(.*?)\}/g, "$1");
+
+    
+    tableContent = tableContent
+      .replace(/\\hline/g, "")
+      .replace(/\\toprule/g, "")
+      .replace(/\\midrule/g, "")
+      .replace(/\\bottomrule/g, "");
+
+    console.log(tableContent)
+
+    const rows = tableContent
+      .split("\\\\")
+      .map((row) => row.trim())
+      .filter(Boolean);
+    const tableData = rows.map((row) =>
+      row.split("&").map((cell) => cell.trim()),
+    );
+    return tableData;
+  }
+
+  function matrixToHtmlTable(matrix: string[][]): string {
+    let html = "<table>";
+    html += "<tr>";
+    for (const cell of matrix[0]) {
+      html += `<th>${cell}</th>`;
+    }
+    html += "</tr>";
+    for (const row of matrix.slice(1)) {
+      html += "<tr>";
+      for (const cell of row) {
+        html += `<td>${cell}</td>`;
+      }
+      html += "</tr>";
+    }
+    html += "</table>";
+    return html;
+  }
+
+  function matrixToMarkdown(matrix: string[][]): string {
+    let md = "";
+    md += "|";
+    for (const cell of matrix[0]) {
+      md += `${cell}|`;
+    }
+    md += "\n";
+    md += "|";
+    for (const cell of matrix[0]) {
+      md += `---|`;
+    }
+    md += "\n";
+    for (const row of matrix.slice(1)) {
+      md += "|";
+      for (const cell of row) {
+        md += `${cell}|`;
+      }
+      md += "\n";
+    }
+    return md;
+  }
+
+  function updateOutput() {
+    const input = latexInput.value.trim();
+    if (!input) {
+      output.textContent = "请输入 LaTeX 表格内容";
+      output.classList.add("error");
+      return;
+    }
+
+    const tableData = texStringToMatrix(input, {
+      trimText: true,
+      trimBf: true,
+      trimIt: true,
+      trimUnderline: true,
+    });
+
+    let outputFormat = "csv";
+    formatRadios.forEach((radio) => {
+      if ((radio as HTMLInputElement).checked) {
+        outputFormat = (radio as HTMLInputElement).value as
+          | "csv"
+          | "html"
+          | "markdown";
+      }
+    });
+
+    let outputResult = "";
+    switch (outputFormat) {
+      case "csv":
+        outputResult = tableData.map((row) => row.join(",")).join("\n");
+        output.textContent = outputResult;
+        break;
+      case "html":
+        outputResult = matrixToHtmlTable(tableData);
+        output.innerHTML = outputResult;
+        break;
+      case "markdown":
+        outputResult = matrixToMarkdown(tableData);
+        output.textContent = outputResult;
+        break;
+    }
+
+    output.classList.remove("error");
+  }
+
+  // 输入框内容变化时更新输出
+  latexInput.addEventListener("input", updateOutput);
+
+  // 格式选择变化时更新输出
+  formatRadios.forEach((radio) => {
+    radio.addEventListener("change", updateOutput);
+  });
+
+  // 复制按钮点击事件
+  copyBtn.addEventListener("click", async () => {
+    let outputFormat = "csv";
+    formatRadios.forEach((radio) => {
+      if ((radio as HTMLInputElement).checked) {
+        outputFormat = (radio as HTMLInputElement).value as
+          | "csv"
+          | "html"
+          | "markdown";
+      }
+    });
+
+    if (output.classList.contains("error")) return;
+
+    try {
+      if (outputFormat === "html") {
+        const htmlContent = output.innerHTML;
+        const blob = new Blob([htmlContent], { type: "text/html" });
+        const clipboardItem = new ClipboardItem({ [blob.type]: blob });
+        await navigator.clipboard.write([clipboardItem]);
+      } else {
+        const text = output.textContent;
+        if (!text) return;
+        await navigator.clipboard.writeText(text);
+      }
+
+      const originalText = copyBtn.textContent;
+      copyBtn.textContent = "已复制!";
+      setTimeout(() => {
+        copyBtn.textContent = originalText;
+      }, 1500);
+    } catch (error) {
+      console.error("复制失败:", error);
+    }
+  });
+</script>
+
+<style>
+  /* 页面特定样式 */
+  .input-wrapper {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .examples {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .examples p {
+    margin: 0;
+    color: var(--muted-foreground);
+  }
+
+  .example-btn {
+    padding: 0.3rem 0.6rem;
+    border: 1px solid hsl(var(--secondary));
+    border-radius: 4px;
+    background: transparent;
+    color: var(--color-text);
+    cursor: pointer;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .example-btn input {
+    margin: 0;
+  }
+
+  .example-btn:hover {
+    background-color: var(--color-hover);
+  }
+
+  @media (max-width: 768px) {
+    .input-wrapper {
+      flex-direction: column;
+    }
+
+    .examples {
+      gap: 0.5rem;
+    }
+
+    .example-btn {
+      font-size: 0.75rem;
+    }
+  }
+</style>
