@@ -3,6 +3,7 @@ import { type JSX, createSignal } from 'solid-js'
 interface ClipboardCopyProps {
   textToCopy: string
   children: JSX.Element
+  class?: string
 }
 
 const ClipboardCopy: (props: ClipboardCopyProps) => JSX.Element = (props) => {
@@ -20,7 +21,7 @@ const ClipboardCopy: (props: ClipboardCopyProps) => JSX.Element = (props) => {
   }
 
   return (
-    <button onClick={handleCopy}>
+    <button class={props.class} onClick={handleCopy}>
       {isCopied() ? 'Copied' : props.children}
     </button>
   )

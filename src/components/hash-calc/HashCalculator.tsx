@@ -64,6 +64,7 @@ const HashCalculator: Component = () => {
         <label for="hashAlgorithm">Hash Algorithm:</label>
         <select
           id="hashAlgorithm"
+          class="select-input"
           onChange={(e) => {
             setAlg((e.target as HTMLSelectElement).value)
             calcHash(inputText(), alg())
@@ -79,12 +80,14 @@ const HashCalculator: Component = () => {
       <div class="result-group">
         <label for="hashResult" class="flex items-center">
           <span class="flex-1">Hash Result:</span>
-          <CopyBtn textToCopy={outputStr()}>Copy</CopyBtn>
+          <CopyBtn class="btn" textToCopy={outputStr()}>
+            Copy
+          </CopyBtn>
         </label>
-        <textarea disabled value={outputStr()} />
+        <textarea class="text-input" disabled value={outputStr()} />
       </div>
 
-      <button onClick={() => calcHash(inputText(), alg())}>
+      <button class="btn" onClick={() => calcHash(inputText(), alg())}>
         Calculate Hash
       </button>
     </div>
