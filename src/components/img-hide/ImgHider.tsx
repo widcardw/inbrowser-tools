@@ -17,6 +17,27 @@ import {
 import '~/styles/tools-common.css'
 import './index.css'
 
+function drawOnNewCanvasXywh(
+  img: HTMLImageElement,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  canvasW: number,
+  canvasH: number,
+) {
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+  canvas.width = canvasW
+  canvas.height = canvasH
+  ctx?.drawImage(img, 0, 0, img.width, img.height, x, y, w, h)
+  return canvas
+}
+
+function drawOnNewCanvas(img: HTMLImageElement, width: number, height: number) {
+  return drawOnNewCanvasXywh(img, 0, 0, width, height, width, height)
+}
+
 const ImgHider: Component = () => {
   const [img1, setImg1] = createSignal<File>()
   const [img2, setImg2] = createSignal<File>()
@@ -31,6 +52,7 @@ const ImgHider: Component = () => {
   const [warningText, setWarningText] = createSignal('')
   const [imgGenerated, setImgGenerated] = createSignal(false)
   const [copyText, setCopyText] = createSignal('复制到剪贴板')
+  const [canvasWidth, setCanvasWidth] = createSignal(100)
 
   createEffect(
     on(img1, async () => {
@@ -158,31 +180,6 @@ const ImgHider: Component = () => {
     setImgGenerated(true)
   }
 
-  function drawOnNewCanvasXywh(
-    img: HTMLImageElement,
-    x: number,
-    y: number,
-    w: number,
-    h: number,
-    canvasW: number,
-    canvasH: number,
-  ) {
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-    canvas.width = canvasW
-    canvas.height = canvasH
-    ctx?.drawImage(img, 0, 0, img.width, img.height, x, y, w, h)
-    return canvas
-  }
-
-  function drawOnNewCanvas(
-    img: HTMLImageElement,
-    width: number,
-    height: number,
-  ) {
-    return drawOnNewCanvasXywh(img, 0, 0, width, height, width, height)
-  }
-
   function downloadImg() {
     if (!imgGenerated()) {
       setWarningText('图像尚未生成')
@@ -239,63 +236,103 @@ const ImgHider: Component = () => {
 
   return (
     <div class="space-y-4">
-      <div class="img-input-grid grid grid-cols-3 gap-2 items-center">
-        <span>原图</span>
+      <div class="flex items-center gap-2">
+        <span class="w-3rem">原图</span>
         <input
+          class="max-w-15rem"
           id="ori-img"
           type="file"
           accept="images/*"
           onChange={(e) => setImg1(e.target.files?.[0])}
         />
-        <span>{img1() ? calcFileSize(img1()?.size) : ''}</span>
-        <span>隐藏图</span>
+        <code class="text-sm">{img1() ? calcFileSize(img1()?.size) : ''}</code>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-3rem">隐藏图</span>
         <input
+          class="max-w-15rem"
           id="hid-img"
           type="file"
           accept="images/*"
           onChange={(e) => setImg2(e.target.files?.[0])}
         />
-        <span>{img2() ? calcFileSize(img2()?.size) : ''}</span>
+        <code class="text-sm">{img2() ? calcFileSize(img2()?.size) : ''}</code>
       </div>
 
-      <div class="param-grid grid grid-cols-3 gap-2 items-center">
-        <span>原图亮度提高</span>
+      <div class="flex items-center gap-2">
+        <span class="w-7rem">原图亮度提高</span>
         <input
+          type="range"
+          min="0"
+          max="100"
+          step="1"
+          class="flex-1"
           value={oriBrightness()}
-          class="text-right text-input"
-          onChange={(e) => setOriBrightness(Number.parseInt(e.target.value))}
+          onInput={(e) => setOriBrightness(Number.parseInt(e.target.value))}
         />
-        <span>%</span>
-        <span>隐藏图亮度降低</span>
-        <input
-          value={hidBrightness()}
-          class="text-right text-input"
-          onChange={(e) => setHidBrightness(Number.parseInt(e.target.value))}
-        />
-        <span>%</span>
-        <span>原图对比度</span>
-        <input
-          value={oriContrast()}
-          class="text-right text-input"
-          onChange={(e) => setOriContrast(Number.parseInt(e.target.value))}
-        />
-        <span>%</span>
-        <span>隐藏图对比度</span>
-        <input
-          value={hidContrast()}
-          class="text-right text-input"
-          onChange={(e) => setHidContrast(Number.parseInt(e.target.value))}
-        />
-        <span>%</span>
+        <code class="text-sm w-2rem text-right">{oriBrightness()}%</code>
       </div>
-      <button disabled class="btn">
-        {sizeMatch() === null
-          ? '尚未上传'
-          : sizeMatch()
-            ? '图像大小一致'
-            : '图像大小不一致'}
-      </button>
-      <div class="flex gap-4">
+      <div class="flex items-center gap-2">
+        <span class="w-7rem">隐藏图亮度降低</span>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          step="1"
+          class="flex-1"
+          value={hidBrightness()}
+          onInput={(e) => setHidBrightness(Number.parseInt(e.target.value))}
+        />
+        <code class="text-sm w-2rem text-right">{hidBrightness()}%</code>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-7rem">原图对比度</span>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          step="1"
+          class="flex-1"
+          value={oriContrast()}
+          onInput={(e) => setOriContrast(Number.parseInt(e.target.value))}
+        />
+        <code class="text-sm w-2rem text-right">{oriContrast()}%</code>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-7rem">隐藏图对比度</span>
+        <input
+          type="range"
+          min="20"
+          max="100"
+          step="1"
+          class="flex-1"
+          value={hidContrast()}
+          onInput={(e) => setHidContrast(Number.parseInt(e.target.value))}
+        />
+        <code class="text-sm w-2rem text-right">{hidContrast()}%</code>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-7rem">窗格宽度</span>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          step="1"
+          class="flex-1"
+          value={canvasWidth()}
+          onInput={(e) => setCanvasWidth(Number.parseInt(e.target.value))}
+        />
+        <code class="text-sm w-2rem text-right">{canvasWidth()}%</code>
+      </div>
+
+      <div class="flex gap-4 flex-wrap">
+        <button disabled class="btn text-sm">
+          {sizeMatch() === null
+            ? '尚未上传'
+            : sizeMatch()
+              ? '图像大小一致'
+              : '图像大小不一致'}
+        </button>
         <label class="radio-btn">
           <input
             type="radio"
@@ -340,7 +377,13 @@ const ImgHider: Component = () => {
           {copyText()}
         </button>
       </div>
-      <canvas ref={(el) => setCanvasEl(el)} class="max-w-full" />
+      <canvas
+        ref={(el) => setCanvasEl(el)}
+        class="mx-a"
+        style={{
+          'max-width': `${canvasWidth()}%`,
+        }}
+      />
     </div>
   )
 }

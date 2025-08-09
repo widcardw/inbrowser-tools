@@ -107,9 +107,9 @@ label {
     flex-direction: column;
   }
 
-  .btn {
+  /*.btn {
     width: 100%;
-  }
+  }*/
 }
 
 .radio-btn {

@@ -283,6 +283,7 @@ const ImgReveal: Component = () => {
 
   const [img, setImg] = createSignal<HTMLImageElement>()
   const [canvas, setCanvas] = createSignal<HTMLCanvasElement>()
+  const [canvasWidth, setCanvasWidth] = createSignal(80)
 
   let adjuster: ExposureAdjuster | null = null
 
@@ -321,7 +322,11 @@ const ImgReveal: Component = () => {
         />
       </label>
       <div class="flex items-center gap-4">
+        <label for="exposure" class="w-4rem">
+          曝光度
+        </label>
         <input
+          id="exposure"
           type="range"
           min="-10.0"
           max="10.0"
@@ -330,8 +335,26 @@ const ImgReveal: Component = () => {
           value={exposure()}
           onInput={(e) => setExposure(Number.parseFloat(e.target.value))}
         />{' '}
-        <code>{exposure().toFixed(1)}</code>
+        <code class="text-sm w-2rem">{exposure().toFixed(1)}</code>
         <button class="btn" onClick={() => setExposure(0)}>
+          重置
+        </button>
+      </div>
+      <div class="flex items-center gap-4">
+        <label for="canvas-width" class="w-4rem">
+          窗格宽度
+        </label>
+        <input
+          id="canvas-width"
+          type="range"
+          min="20"
+          max="100"
+          class="flex-1"
+          value={canvasWidth()}
+          onInput={(e) => setCanvasWidth(Number.parseFloat(e.target.value))}
+        />
+        <code class="text-sm w-2rem">{canvasWidth()}%</code>
+        <button class="btn" onClick={() => setCanvasWidth(80)}>
           重置
         </button>
       </div>
@@ -340,7 +363,13 @@ const ImgReveal: Component = () => {
           src={img()!.src}
           alt={img()!.sizes}
         />*/}
-        <canvas ref={(el) => setCanvas(el)} class="max-w-full" />
+        <canvas
+          ref={(el) => setCanvas(el)}
+          class="mx-a"
+          style={{
+            'max-width': `${canvasWidth()}%`,
+          }}
+        />
       </Show>
     </div>
   )

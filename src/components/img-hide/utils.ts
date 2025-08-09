@@ -3,11 +3,11 @@ function calcFileSize(s: number | null | undefined) {
 
   if (Number.isNaN(s) || !Number.isFinite(s)) return 'Cannot calc file size'
 
-  if (s < 2048) return `${s} B`
+  if (s < 1024) return `${s} B`
 
-  if (s < 2097152) return `${(s / 1024).toFixed(1)} KB`
+  if (s < 1048576) return `${(s / 1024).toFixed(1)} KB`
 
-  if (s < 2147483648) return `${(s / 1048576).toFixed(1)} MB`
+  if (s < 1073741824) return `${(s / 1048576).toFixed(1)} MB`
 
   return `${(s / 1073741824).toFixed(1)} GB`
 }
