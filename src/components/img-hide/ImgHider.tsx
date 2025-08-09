@@ -171,7 +171,6 @@ const ImgHider: Component = () => {
     const ctx = canvas.getContext('2d')
     canvas.width = canvasW
     canvas.height = canvasH
-    // ctx?.drawImage(img, x, y, w, h)
     ctx?.drawImage(img, 0, 0, img.width, img.height, x, y, w, h)
     return canvas
   }
@@ -341,7 +340,7 @@ const ImgHider: Component = () => {
           {copyText()}
         </button>
       </div>
-      <canvas ref={(el) => setCanvasEl(el)} class="w-800px max-w-full" />
+      <canvas ref={(el) => setCanvasEl(el)} class="max-w-full" />
     </div>
   )
 }

@@ -1,5 +1,7 @@
 ---
 import ImgHider from '~/components/img-hide/ImgHider'
+import ImgReveal from '~/components/img-hide/ImgReveal'
+import { Content as HowToCreate } from '~/components/img-hide/how.md'
 import PageLayout from '~/layouts/PageLayout.astro'
 import '~/styles/global.css'
 ---
@@ -8,6 +10,11 @@ import '~/styles/global.css'
     <h3>光棱坦克 图片生成器</h3>
     <blockquote>算法拷贝自<a href="https://2x.nz/posts/hideimg/" target="_blank">二叉树树</a></blockquote>
     <ImgHider client:idle />
+    <hr class="my-4" />
+    <h4>光棱塔</h4>
+    <ImgReveal client:idle />
+    <hr class="my-4" />
+    <HowToCreate />
 </PageLayout>
 
 <style>

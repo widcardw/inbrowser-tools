@@ -15,7 +15,8 @@
       "style": {
         "noNonNullAssertion": "off",
         "noParameterAssign": "off",
-        "useImportType": "warn"
+        "useImportType": "warn",
+        "useExponentiationOperator": "off"
       },
       "complexity": {
         "noForEach": "off",
@@ -26,20 +27,12 @@
         "noEmptyInterface": "off"
       }
     },
-    "ignore": [
-      "node_modules/**",
-      "dist/**",
-      ".vscode/**"
-    ]
+    "ignore": ["node_modules/**", "dist/**", ".vscode/**"]
   },
   "formatter": {
     "indentStyle": "space",
     "indentWidth": 2,
-    "ignore": [
-      "node_modules/**",
-      "dist/**",
-      ".vscode/**"
-    ],
+    "ignore": ["node_modules/**", "dist/**", ".vscode/**"],
     "lineEnding": "lf"
   },
   "javascript": {

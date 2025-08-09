@@ -55,7 +55,7 @@
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -71,7 +71,6 @@ a:hover {
   /* 鼠标悬停时变成实下划线 */
   text-decoration: underline solid 0.5px;
 }
-
 
 /* input 基础样式 */
 input[type="text"] {
@@ -108,9 +107,13 @@ input[type="text"]:disabled {
   box-shadow: 0 0 0 2px hsla(var(--accent), 0.4);
 }
 
-
 /* h1 - h6 基础样式 */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: inherit;
   color: hsl(var(--foreground));
   font-weight: 700;
@@ -151,4 +154,12 @@ h6 {
 [data-theme="dark"] h5,
 [data-theme="dark"] h6 {
   color: hsl(var(--foreground));
+}
+
+.astro-code {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
 }
