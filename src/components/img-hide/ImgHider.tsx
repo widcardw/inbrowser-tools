@@ -317,7 +317,7 @@ const ImgHider: Component = () => {
           缩放以适应
         </label>
       </div>
-      <div class=" space-y-2 md:flex items-center gap-4">
+      <div class="flex items-center gap-4 flex-wrap">
         <button class="btn primary" onClick={drawImgStretch}>
           生成图片
         </button>
