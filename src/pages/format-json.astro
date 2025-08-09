@@ -24,15 +24,15 @@ import '../styles/tools-common.css'
       <div class="option-group">
         <label>缩进选项：</label>
         <div class="radio-group">
-          <label>
+            <label class="radio-btn">
             <input type="radio" name="indent" value="0" />
             无缩进
           </label>
-          <label>
+          <label class="radio-btn">
             <input type="radio" name="indent" value="2" checked />
             2 空格
           </label>
-          <label>
+          <label class="radio-btn">
             <input type="radio" name="indent" value="4" />
             4 空格
           </label>
@@ -82,7 +82,7 @@ import '../styles/tools-common.css'
   formatBtn.addEventListener('click', () => {
     try {
       let jsonStr = inputJson.value.trim();
-      
+
       if (!jsonStr) {
         outputJson.textContent = '请输入 JSON 数据';
         outputJson.classList.add('error');
@@ -115,7 +115,7 @@ import '../styles/tools-common.css'
 
       // 格式化 JSON
       let formattedJson = JSON.stringify(jsonObj, null, indent);
-      
+
       // 去除转义符
       if (unescapeCheckbox.checked) {
         formattedJson = unescapeJson(formattedJson);
@@ -163,11 +163,11 @@ import '../styles/tools-common.css'
 
     const sortedObj: Record<string, any> = {};
     const keys = Object.keys(obj).sort();
-    
+
     for (const key of keys) {
       sortedObj[key] = sortObjectKeys(obj[key]);
     }
-    
+
     return sortedObj;
   }
 

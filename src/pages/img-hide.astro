@@ -1,0 +1,19 @@
+---
+import ImgHider from '~/components/img-hide/ImgHider'
+import PageLayout from '~/layouts/PageLayout.astro'
+import '~/styles/global.css'
+---
+
+<PageLayout title="光棱坦克">
+    <h3>光棱坦克 图片生成器</h3>
+    <blockquote>算法拷贝自<a href="https://2x.nz/posts/hideimg/" target="_blank">二叉树树</a></blockquote>
+    <ImgHider client:idle />
+</PageLayout>
+
+<style>
+blockquote {
+    font-style: italic;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+</style>

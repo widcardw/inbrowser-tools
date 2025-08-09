@@ -1,6 +1,6 @@
 ---
-import PageLayout from '../layouts/PageLayout.astro';
-import '../styles/tools-common.css';
+import PageLayout from '../layouts/PageLayout.astro'
+import '../styles/tools-common.css'
 ---
 
 <PageLayout title="查询参数转 JSON">
@@ -28,12 +28,12 @@ import '../styles/tools-common.css';
       </div>
     </div>
 
-    <div class="output-section">
+    <div class="output-section space-y-2">
       <div class="output-header">
         <label for="output-text">JSON 结果：</label>
-        <button id="copy-btn" class="btn">复制</button>
       </div>
       <pre id="output-text" class="output"></pre>
+      <button id="copy-btn" class="btn">复制</button>
     </div>
   </div>
 </PageLayout>
@@ -49,7 +49,7 @@ import '../styles/tools-common.css';
   // 解析查询字符串为对象的函数
   function parseQueryString(queryString: string) {
     // 移除 URL 中的其他部分，只保留查询参数
-    const searchParams = queryString.includes('?') 
+    const searchParams = queryString.includes('?')
       ? queryString.split('?')[1]
       : queryString;
 
@@ -65,9 +65,9 @@ import '../styles/tools-common.css';
 
     searchParams.split('&').forEach(param => {
       if (!param) return;
-      
+
       let [key, value] = param.split('=').map(decode);
-      
+
       // 处理数组语法 colors[]=red
       if (key.endsWith('[]')) {
         key = key.slice(0, -2);

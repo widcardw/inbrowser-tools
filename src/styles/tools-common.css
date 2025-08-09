@@ -76,7 +76,6 @@ label {
   background-color: hsl(var(--secondary));
   color: hsl(var(--secondary-foreground));
   font-weight: 500;
-  cursor: pointer;
   transition: background-color 0.2s, transform 0.1s;
   white-space: nowrap;
 }
@@ -98,6 +97,10 @@ label {
   background-color: hsla(var(--accent), 0.9);
 }
 
+.btn:disabled {
+  opacity: 0.8;
+}
+
 /* 响应式样式 */
 @media (max-width: 768px) {
   .buttons {
@@ -106,5 +109,33 @@ label {
 
   .btn {
     width: 100%;
+  }
+}
+
+.radio-btn {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid hsl(var(--secondary));
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.radio-btn input {
+  margin: 0;
+}
+
+.radio-btn:hover {
+  background-color: var(--color-hover);
+  color: hsl(var(--accent-foreground));
+}
+
+@media (max-width: 768px) {
+  .radio-btn {
+    font-size: 0.75rem;
   }
 }

@@ -79,17 +79,17 @@ const HashCalculator: Component = () => {
 
       <div class="result-group">
         <label for="hashResult" class="flex items-center">
-          <span class="flex-1">Hash Result:</span>
-          <CopyBtn class="btn" textToCopy={outputStr()}>
-            Copy
-          </CopyBtn>
+          Hash Result:
         </label>
         <textarea class="text-input" disabled value={outputStr()} />
       </div>
 
-      <button class="btn" onClick={() => calcHash(inputText(), alg())}>
+      <button class="btn primary" onClick={() => calcHash(inputText(), alg())}>
         Calculate Hash
       </button>
+      <CopyBtn class="btn" textToCopy={outputStr()}>
+        Copy
+      </CopyBtn>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 ---
-import PageLayout from '../layouts/PageLayout.astro';
-import '../styles/tools-common.css';
+import PageLayout from '../layouts/PageLayout.astro'
+import '../styles/tools-common.css'
 ---
 
 <PageLayout title="字符转义工具">
@@ -146,12 +146,14 @@ import '../styles/tools-common.css';
   });
 
   // 复制按钮点击事件
-  copyBtn.addEventListener('click', () => {
-    outputText.select();
-    document.execCommand('copy');
-    
+  copyBtn.addEventListener('click', async () => {
     const originalText = copyBtn.textContent;
-    copyBtn.textContent = '已复制!';
+    try {
+      const clipboard = await navigator.clipboard.writeText(outputText.value)
+      copyBtn.textContent = '已复制!';
+    } catch (error) {
+      copyBtn.textContent = '复制失败';
+    }
     setTimeout(() => {
       copyBtn.textContent = originalText;
     }, 1500);

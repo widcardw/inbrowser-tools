@@ -1,6 +1,6 @@
 ---
-import PageLayout from "../layouts/PageLayout.astro";
-import "../styles/tools-common.css";
+import PageLayout from '../layouts/PageLayout.astro'
+import '../styles/tools-common.css'
 ---
 
 <PageLayout title="LaTeX 表格转换工具">
@@ -22,7 +22,7 @@ import "../styles/tools-common.css";
     <div class="input-section">
       <p>选择输出格式：</p>
       <div class="examples">
-        <label class="example-btn">
+        <label class="radio-btn">
           <input
             type="radio"
             id="output-fmt-csv"
@@ -31,7 +31,7 @@ import "../styles/tools-common.css";
             checked
           /> CSV
         </label>
-        <label class="example-btn">
+        <label class="radio-btn">
           <input
             type="radio"
             id="output-fmt-html"
@@ -39,7 +39,7 @@ import "../styles/tools-common.css";
             value="html"
           /> HTML 表格
         </label>
-        <label class="example-btn">
+        <label class="radio-btn">
           <input
             type="radio"
             id="output-fmt-md"
@@ -50,12 +50,12 @@ import "../styles/tools-common.css";
       </div>
     </div>
 
-    <div class="output-section">
+    <div class="output-section space-y-2">
       <div class="output-header">
         <label for="output">转换结果：</label>
-        <button id="copy-btn" class="btn">复制</button>
       </div>
       <pre id="output" class="output"></pre>
+      <button id="copy-btn" class="btn">复制</button>
     </div>
   </div>
 </PageLayout>
@@ -98,7 +98,7 @@ import "../styles/tools-common.css";
       trailingIdx = cleanedInput.indexOf(matchTrailing[0])
     }
     let tableContent = cleanedInput.slice(leadingIdx, trailingIdx);
-    
+
     // let tableContent = match[2].trim();
     if (config.trimText ?? true)
       tableContent = tableContent.replace(/\\text\{(.*?)\}/g, "$1");
@@ -112,7 +112,7 @@ import "../styles/tools-common.css";
     if (config.trimUnderline ?? true)
       tableContent = tableContent.replace(/\\underline\{(.*?)\}/g, "$1");
 
-    
+
     tableContent = tableContent
       .replace(/\\hline/g, "")
       .replace(/\\toprule/g, "")
@@ -287,27 +287,6 @@ import "../styles/tools-common.css";
     color: var(--muted-foreground);
   }
 
-  .example-btn {
-    padding: 0.3rem 0.6rem;
-    border: 1px solid hsl(var(--secondary));
-    border-radius: 4px;
-    background: transparent;
-    color: var(--color-text);
-    cursor: pointer;
-    font-size: 0.875rem;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-  }
-
-  .example-btn input {
-    margin: 0;
-  }
-
-  .example-btn:hover {
-    background-color: var(--color-hover);
-  }
-
   @media (max-width: 768px) {
     .input-wrapper {
       flex-direction: column;
@@ -315,10 +294,6 @@ import "../styles/tools-common.css";
 
     .examples {
       gap: 0.5rem;
-    }
-
-    .example-btn {
-      font-size: 0.75rem;
     }
   }
 </style>
