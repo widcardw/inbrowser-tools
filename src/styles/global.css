@@ -118,7 +118,7 @@ h6 {
   color: hsl(var(--foreground));
   font-weight: 700;
   line-height: 1.2;
-  margin-top: 0;
+  margin-top: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -162,4 +162,21 @@ h6 {
   margin-top: 1rem;
   margin-bottom: 1rem;
   font-size: 0.875rem;
+}
+
+/* Utility classes for theme colors */
+.border-secondary {
+  border-color: hsl(var(--secondary));
+}
+
+.bg-secondary {
+  background-color: hsl(var(--secondary));
+}
+
+.text-secondary-foreground {
+  color: hsl(var(--secondary-foreground));
+}
+
+.text-muted-foreground {
+  color: hsl(var(--muted-foreground));
 }

@@ -1,9 +1,12 @@
 ---
 import PageLayout from '~/layouts/PageLayout.astro';
 import ColorConverter from '~/components/colorConverter/color';
+import ColorMixer from '~/components/colorMix/color_mix';
 ---
 
 <PageLayout>
   <h3>Color Convertor</h3>
   <ColorConverter client:idle />
+  <h3>Color Mix</h3>
+  <ColorMixer client:idle />
 </PageLayout>
