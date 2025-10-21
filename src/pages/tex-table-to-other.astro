@@ -82,7 +82,7 @@ import '../styles/tools-common.css'
     input: string,
     config: TexStringToMatrixConfig,
   ): string[][] {
-    let cleanedInput = input.replace(/%.*$/gm, "").trim();
+    let cleanedInput = input.replace(/(?<!\\)%.*$/gm, "").trim();
     // const match = cleanedInput.match(
     //   /(\\begin\{tabular\}\{.*?\})?(.*)(\\end\{tabular\})?/s,
     // );
