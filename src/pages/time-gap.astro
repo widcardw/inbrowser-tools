@@ -1,0 +1,180 @@
+---
+import Layout from '../layouts/PageLayout.astro';
+---
+
+<Layout title="时间差计算器">
+  <div class="container mx-auto p-4 max-w-2xl">
+    <h1 class="text-3xl font-bold mb-6 text-center">时间差计算器</h1>
+    
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="time1">
+          起始时间
+        </label>
+        <input
+          id="time1"
+          type="text"
+          placeholder="例如: 2023-12-01 10:30:00 或 10:30:00 或 时间戳"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+      </div>
+      
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="time2">
+          结束时间
+        </label>
+        <input
+          id="time2"
+          type="text"
+          placeholder="例如: 2023-12-01 12:45:30 或 12:45:30 或 时间戳"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+      </div>
+      
+      <button
+        id="calculateBtn"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+      >
+        计算时间差
+      </button>
+    </div>
+    
+    <div id="result" class="hidden">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <div id="error" class="text-red-500 text-center py-4 hidden"></div>
+        <div id="success" class="hidden">
+          <h2 class="text-xl font-semibold mb-4 text-center">计算结果</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+            <div class="bg-blue-100 p-4 rounded">
+              <div id="milliseconds" class="text-2xl font-bold text-blue-800"></div>
+              <div class="text-gray-600">毫秒</div>
+            </div>
+            <div class="bg-green-100 p-4 rounded">
+              <div id="seconds" class="text-2xl font-bold text-green-800"></div>
+              <div class="text-gray-600">秒</div>
+            </div>
+            <div class="bg-purple-100 p-4 rounded">
+              <div id="minutes" class="text-2xl font-bold text-purple-800"></div>
+              <div class="text-gray-600">分钟</div>
+            </div>
+          </div>
+          <div class="mt-4 text-sm text-gray-500 text-center">
+            <p id="timeRange"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-6 text-sm text-gray-600">
+      <h3 class="font-semibold mb-2">支持的时间格式:</h3>
+      <ul class="list-disc pl-5 space-y-1">
+        <li>ISO 格式: 2023-12-01T10:30:00Z</li>
+        <li>日期时间: 2023-12-01 10:30:00</li>
+        <li>简单时间: 10:30:00 或 10:30</li>
+        <li>时间戳: 1701234567890</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const time1Input = document.getElementById('time1') as HTMLInputElement;
+      const time2Input = document.getElementById('time2') as HTMLInputElement;
+      const calculateBtn = document.getElementById('calculateBtn')!;
+      const resultDiv = document.getElementById('result')!;
+      const errorDiv = document.getElementById('error')!;
+      const successDiv = document.getElementById('success')!;
+      const millisecondsEl = document.getElementById('milliseconds')!;
+      const secondsEl = document.getElementById('seconds')!;
+      const minutesEl = document.getElementById('minutes')!;
+      const timeRangeEl = document.getElementById('timeRange')!;
+
+      function parseTime(timeStr: string) {
+        if (!timeStr.trim()) return null;
+        
+        // 尝试多种时间格式解析
+        const formats = [
+          // ISO 格式
+          () => new Date(timeStr),
+          
+          // 时间戳
+          () => {
+            const timestamp = Number(timeStr);
+            if (!isNaN(timestamp) && timestamp > 0) {
+              return new Date(timestamp);
+            }
+            return null;
+          },
+          
+          // 简单时间格式 (HH:mm:ss)
+          () => {
+            const timeRegex = /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/;
+            const match = timeStr.match(timeRegex);
+            if (match) {
+              const [, hours, minutes, seconds = '0'] = match;
+              const date = new Date();
+              date.setHours(parseInt(hours, 10));
+              date.setMinutes(parseInt(minutes, 10));
+              date.setSeconds(parseInt(seconds, 10));
+              date.setMilliseconds(0);
+              return date;
+            }
+            return null;
+          },
+          
+          // 日期时间格式 (YYYY-MM-DD HH:mm:ss)
+          () => {
+            const dateTimeRegex = /^(\d{4}-\d{2}-\d{2})\s+(\d{1,2}:\d{2}(?::\d{2})?)$/;
+            const match = timeStr.match(dateTimeRegex);
+            if (match) {
+              return new Date(`${match[1]}T${match[2]}`);
+            }
+            return null;
+          }
+        ];
+        
+        for (const format of formats) {
+          try {
+            const date = format();
+            if (date && !isNaN(date.getTime())) {
+              return date;
+            }
+          } catch (e) {
+            continue;
+          }
+        }
+        
+        return null;
+      }
+
+      function calculateGap() {
+        const t1 = parseTime(time1Input.value);
+        const t2 = parseTime(time2Input.value);
+        
+        if (!t1 || !t2) {
+          resultDiv.classList.remove('hidden');
+          errorDiv.classList.remove('hidden');
+          successDiv.classList.add('hidden');
+          errorDiv.textContent = '无法解析时间格式，请检查输入';
+          return;
+        }
+        
+        const diffMs = Math.abs(t2.getTime() - t1.getTime());
+        const diffSeconds = diffMs / 1000;
+        const diffMinutes = diffSeconds / 60;
+        
+        // 显示结果
+        resultDiv.classList.remove('hidden');
+        errorDiv.classList.add('hidden');
+        successDiv.classList.remove('hidden');
+        
+        millisecondsEl.textContent = diffMs.toLocaleString();
+        secondsEl.textContent = diffSeconds.toLocaleString();
+        minutesEl.textContent = diffMinutes.toLocaleString(undefined, { maximumFractionDigits: 2 });
+        timeRangeEl.textContent = `从 ${t1.toString()} 到 ${t2.toString()}`;
+      }
+
+      calculateBtn.addEventListener('click', calculateGap);
+    });
+  </script>
+</Layout>
