@@ -6,41 +6,41 @@ import Layout from '../layouts/PageLayout.astro';
   <div class="container mx-auto p-4 max-w-2xl">
     <h1 class="text-3xl font-bold mb-6 text-center">时间差计算器</h1>
     
-    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+    <div class="bg-background-secondary rounded-lg shadow-md p-6 mb-6">
       <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="time1">
+        <label class="block text-sm font-bold mb-2" for="time1">
           起始时间
         </label>
         <input
           id="time1"
           type="text"
           placeholder="例如: 2023-12-01 10:30:00 或 10:30:00 或 时间戳"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>
       
       <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="time2">
+        <label class="block text-sm font-bold mb-2" for="time2">
           结束时间
         </label>
         <input
           id="time2"
           type="text"
           placeholder="例如: 2023-12-01 12:45:30 或 12:45:30 或 时间戳"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>
       
       <button
         id="calculateBtn"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+        class="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
       >
         计算时间差
       </button>
     </div>
     
     <div id="result" class="hidden">
-      <div class="bg-white rounded-lg shadow-md p-6">
+      <div class="bg-background-secondary rounded-lg shadow-md p-6">
         <div id="error" class="text-red-500 text-center py-4 hidden"></div>
         <div id="success" class="hidden">
           <h2 class="text-xl font-semibold mb-4 text-center">计算结果</h2>
@@ -60,6 +60,53 @@ import Layout from '../layouts/PageLayout.astro';
           </div>
           <div class="mt-4 text-sm text-gray-500 text-center">
             <p id="timeRange"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 新增的表达式计算区域 -->
+    <div class="bg-background-secondary rounded-lg shadow-md p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4 text-center">表达式计算</h2>
+      <div class="mb-4">
+        <label class="block text-sm font-bold mb-2" for="expression">
+          时间表达式（减号前后请注意各留一个空格）
+        </label>
+        <input
+          id="expression"
+          type="text"
+          placeholder="例如: 2023-12-01 12:00:00 - 2023-12-01 10:30:00"
+          class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+        />
+      </div>
+      
+      <button
+        id="calculateExpressionBtn"
+        class="bg-green-500 hover:bg-green-700 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+      >
+        计算表达式
+      </button>
+      
+      <div id="expressionResult" class="mt-4 hidden">
+        <div id="expressionError" class="text-red-500 text-center py-2 hidden"></div>
+        <div id="expressionSuccess" class="hidden">
+          <h3 class="text-lg font-medium mb-2 text-center">计算结果</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+            <div class="bg-blue-100 p-4 rounded">
+              <div id="exprMilliseconds" class="text-2xl font-bold text-blue-800"></div>
+              <div class="text-gray-600">毫秒</div>
+            </div>
+            <div class="bg-green-100 p-4 rounded">
+              <div id="exprSeconds" class="text-2xl font-bold text-green-800"></div>
+              <div class="text-gray-600">秒</div>
+            </div>
+            <div class="bg-purple-100 p-4 rounded">
+              <div id="exprMinutes" class="text-2xl font-bold text-purple-800"></div>
+              <div class="text-gray-600">分钟</div>
+            </div>
+          </div>
+          <div class="mt-4 text-sm text-gray-500 text-center">
+            <p id="exprTimeRange"></p>
           </div>
         </div>
       </div>
@@ -88,6 +135,17 @@ import Layout from '../layouts/PageLayout.astro';
       const secondsEl = document.getElementById('seconds')!;
       const minutesEl = document.getElementById('minutes')!;
       const timeRangeEl = document.getElementById('timeRange')!;
+
+      // 新增的表达式相关元素
+      const expressionInput = document.getElementById('expression') as HTMLInputElement;
+      const calculateExpressionBtn = document.getElementById('calculateExpressionBtn')!;
+      const expressionResultDiv = document.getElementById('expressionResult')!;
+      const expressionErrorDiv = document.getElementById('expressionError')!;
+      const expressionSuccessDiv = document.getElementById('expressionSuccess')!;
+      const exprMillisecondsEl = document.getElementById('exprMilliseconds')!;
+      const exprSecondsEl = document.getElementById('exprSeconds')!;
+      const exprMinutesEl = document.getElementById('exprMinutes')!;
+      const exprTimeRangeEl = document.getElementById('exprTimeRange')!;
 
       function parseTime(timeStr: string) {
         if (!timeStr.trim()) return null;
@@ -174,7 +232,50 @@ import Layout from '../layouts/PageLayout.astro';
         timeRangeEl.textContent = `从 ${t1.toString()} 到 ${t2.toString()}`;
       }
 
+      // 解析表达式中的时间
+      function parseExpression(expression: string) {
+        // 支持 "time1 - time2" 格式
+        const parts = expression.split(' - ').map(part => part.trim());
+        if (parts.length !== 2) {
+          throw new Error('表达式格式错误，请使用 "时间1 - 时间2" 的格式');
+        }
+        
+        const t1 = parseTime(parts[0]);
+        const t2 = parseTime(parts[1]);
+        
+        if (!t1) throw new Error(`无法解析起始时间: ${parts[0]}`);
+        if (!t2) throw new Error(`无法解析结束时间: ${parts[1]}`);
+        
+        return { t1, t2 };
+      }
+
+      // 计算表达式
+      function calculateExpression() {
+        try {
+          const { t1, t2 } = parseExpression(expressionInput.value);
+          const diffMs = Math.abs(t2.getTime() - t1.getTime());
+          const diffSeconds = diffMs / 1000;
+          const diffMinutes = diffSeconds / 60;
+          
+          // 显示结果
+          expressionResultDiv.classList.remove('hidden');
+          expressionErrorDiv.classList.add('hidden');
+          expressionSuccessDiv.classList.remove('hidden');
+          
+          exprMillisecondsEl.textContent = diffMs.toLocaleString();
+          exprSecondsEl.textContent = diffSeconds.toLocaleString();
+          exprMinutesEl.textContent = diffMinutes.toLocaleString(undefined, { maximumFractionDigits: 2 });
+          exprTimeRangeEl.textContent = `从 ${t1.toString()} 到 ${t2.toString()}`;
+        } catch (error: any) {
+          expressionResultDiv.classList.remove('hidden');
+          expressionErrorDiv.classList.remove('hidden');
+          expressionSuccessDiv.classList.add('hidden');
+          expressionErrorDiv.textContent = error.message || '计算表达式时出错';
+        }
+      }
+
       calculateBtn.addEventListener('click', calculateGap);
+      calculateExpressionBtn.addEventListener('click', calculateExpression);
     });
   </script>
 </Layout>
