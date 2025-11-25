@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/PageLayout.astro';
+import '../styles/tools-common.css';
 ---
 
 <Layout title="时间差计算器">
@@ -15,7 +16,7 @@ import Layout from '../layouts/PageLayout.astro';
           id="time1"
           type="text"
           placeholder="例如: 2023-12-01 10:30:00 或 10:30:00 或 时间戳"
-          class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+          class="w-full"
         />
       </div>
       
@@ -27,13 +28,13 @@ import Layout from '../layouts/PageLayout.astro';
           id="time2"
           type="text"
           placeholder="例如: 2023-12-01 12:45:30 或 12:45:30 或 时间戳"
-          class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+          class="w-full"
         />
       </div>
       
       <button
         id="calculateBtn"
-        class="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+        class="btn primary w-full"
       >
         计算时间差
       </button>
@@ -76,13 +77,13 @@ import Layout from '../layouts/PageLayout.astro';
           id="expression"
           type="text"
           placeholder="例如: 2023-12-01 12:00:00 - 2023-12-01 10:30:00"
-          class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+          class="w-full"
         />
       </div>
       
       <button
         id="calculateExpressionBtn"
-        class="bg-green-500 hover:bg-green-700 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+        class="btn primary w-full"
       >
         计算表达式
       </button>
@@ -112,7 +113,7 @@ import Layout from '../layouts/PageLayout.astro';
       </div>
     </div>
     
-    <div class="mt-6 text-sm text-gray-600">
+    <div class="mt-6 text-sm text-gray-500">
       <h3 class="font-semibold mb-2">支持的时间格式:</h3>
       <ul class="list-disc pl-5 space-y-1">
         <li>ISO 格式: 2023-12-01T10:30:00Z</li>

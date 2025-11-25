@@ -1,33 +1,111 @@
 ---
 const navItems = [
-  { href: '/', text: '首页' },
-  { href: '/colors', text: '颜色转换' },
-  { href: '/uri-tools', text: 'URI 编码/解码' },
-  { href: '/query-to-json', text: '查询参数转 JSON' },
-  { href: '/format-json', text: 'JSON 格式化' },
-  { href: '/escape-convert', text: '字符转义工具' },
-  { href: '/tex-table-to-other', text: 'Tex 表格转换' },
-  { href: '/hash', text: 'Hash' },
-  { href: '/img-hide', text: '光棱坦克' },
-  { href: '/time-gap', text: '时间差计算' }
-]
+  { href: "/", text: "首页" },
+  { href: "/colors", text: "颜色转换" },
+  { href: "/uri-tools", text: "URI 编码/解码" },
+  { href: "/query-to-json", text: "查询参数转 JSON" },
+  { href: "/format-json", text: "JSON 格式化" },
+  { href: "/escape-convert", text: "字符转义工具" },
+  { href: "/tex-table-to-other", text: "Tex 表格转换" },
+  { href: "/hash", text: "Hash" },
+  { href: "/img-hide", text: "光棱坦克" },
+  { href: "/time-gap", text: "时间差计算" },
+  { href: "/monochrome-image", text: "图像去色" },
+];
 
-const currentPath = Astro.url.pathname
+interface NaviCateItem {
+  cate: string;
+  text: string;
+  children: Array<{
+    href: string;
+    text: string;
+  }>;
+  href?: string;
+}
+
+const navCateItems: NaviCateItem[] = [
+  { cate: "home", text: "Home", children: [], href: "/" },
+  {
+    cate: "image",
+    text: "Image",
+    children: [
+      { href: "/img-hide", text: "光棱坦克" },
+      { href: "/monochrome-image", text: "图像去色" },
+      { href: "/colors", text: "颜色转换" },
+    ],
+  },
+  {
+    cate: "time",
+    text: "Time",
+    children: [{ href: "/time-gap", text: "时间差计算" }],
+  },
+  {
+    cate: "convertion",
+    text: "Convertion",
+    children: [
+      { href: "/uri-tools", text: "URI 编码/解码" },
+      { href: "/query-to-json", text: "查询参数转 JSON" },
+      { href: "/format-json", text: "JSON 格式化" },
+      { href: "/escape-convert", text: "字符转义工具" },
+    ],
+  },
+  {
+    cate: "tex",
+    text: "Tex",
+    children: [{ href: "/tex-table-to-other", text: "Tex 表格转换" }],
+  },
+  {
+    cate: "other",
+    text: "Other",
+    children: [{ href: "/hash", text: "Hash" }],
+  },
+];
+
+const currentPath = Astro.url.pathname;
 ---
 
 <aside class="sidebar">
   <nav class="nav-menu">
     {
-      navItems.map(({ href, text }) => (
-        <a
-          href={href}
-          class:list={[
-            'nav-item',
-            { active: currentPath === href || (href !== '/' && currentPath.startsWith(href)) },
-          ]}
-        >
-          {text}
-        </a>
+      navCateItems.map(({ text, children, href }) => (
+        <div class="space-y-1">
+          {href ? (
+            <a
+              href={href}
+              class:list={[
+                "nav-item", "font-bold text-1.125rem",
+                {
+                  active:
+                    currentPath === href ||
+                    (href !== "/" && currentPath.startsWith(href)),
+                },
+              ]}
+            >
+              {text}
+            </a>
+          ) : (
+            <span class="py-0.1rem px-1 font-bold text-1.125rem">{text}</span>
+          )}
+          <ul class="space-y-1 ml-3">
+            {children.map(({ href: href2, text }) => (
+              <li>
+                <a
+                  href={href2}
+                  class:list={[
+                    "nav-item",
+                    {
+                      active:
+                        currentPath === href2 ||
+                        (href2 !== "/" && currentPath.startsWith(href2)),
+                    },
+                  ]}
+                >
+                  {text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       ))
     }
   </nav>
@@ -49,19 +127,20 @@ const currentPath = Astro.url.pathname
   }
 
   .nav-item {
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+    padding: 0.1rem 0.25rem;
+    border-radius: 0.25rem;
     color: var(--color-text);
     text-decoration: none;
-    transition: background-color 0.2s;
   }
 
   .nav-item:hover {
     background-color: var(--color-hover);
+    color: white;
   }
 
   .nav-item.active {
     background-color: var(--color-active);
+    color: white;
     font-weight: 500;
   }
 
