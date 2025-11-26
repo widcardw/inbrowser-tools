@@ -8,7 +8,7 @@ import '../styles/tools-common.css'
         <div class="upload-area" id="uploadArea">
             <p>点击选择图片、拖拽图片到此处或粘贴图片 (Ctrl+V)</p>
             <input type="file" id="fileInput" accept="image/*" hidden />
-            <button id="selectButton">选择图片</button>
+            <button class="btn primary mt-4" id="selectButton">选择图片</button>
         </div>
         
         <div class="preview-container" id="previewContainer" style="display: none;">
@@ -19,8 +19,8 @@ import '../styles/tools-common.css'
             <canvas id="grayscaleCanvas" class="block" style="margin: 15px auto"></canvas>
             
             <div class="actions">
-                <button id="downloadButton">下载黑白图</button>
-                <button id="resetButton">清除选择</button>
+                <button class="btn primary" id="downloadButton">下载黑白图</button>
+                <button class="btn primary" id="resetButton">清除选择</button>
             </div>
         </div>
     </div>
@@ -174,7 +174,7 @@ import '../styles/tools-common.css'
             border-color: #007acc;
         }
         
-        #selectButton {
+        /*#selectButton {
             background-color: #007acc;
             color: white;
             border: none;
@@ -187,7 +187,7 @@ import '../styles/tools-common.css'
         
         #selectButton:hover {
             background-color: #005a9e;
-        }
+        }*/
         
         .preview-container {
             text-align: center;
@@ -204,7 +204,7 @@ import '../styles/tools-common.css'
             margin: 20px 0;
         }
         
-        .actions button {
+        /*.actions button {
             background-color: #007acc;
             color: white;
             border: none;
@@ -217,6 +217,6 @@ import '../styles/tools-common.css'
         
         .actions button:hover {
             background-color: #005a9e;
-        }
+        }*/
     </style>
 </PageLayout>

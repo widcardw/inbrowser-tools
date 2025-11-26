@@ -336,7 +336,7 @@ const ImgReveal: Component = () => {
           onInput={(e) => setExposure(Number.parseFloat(e.target.value))}
         />{' '}
         <code class="text-sm w-2rem">{exposure().toFixed(1)}</code>
-        <button class="btn" onClick={() => setExposure(0)}>
+        <button class="btn primary" onClick={() => setExposure(0)}>
           重置
         </button>
       </div>
@@ -354,7 +354,7 @@ const ImgReveal: Component = () => {
           onInput={(e) => setCanvasWidth(Number.parseFloat(e.target.value))}
         />
         <code class="text-sm w-2rem">{canvasWidth()}%</code>
-        <button class="btn" onClick={() => setCanvasWidth(80)}>
+        <button class="btn primary" onClick={() => setCanvasWidth(80)}>
           重置
         </button>
       </div>
