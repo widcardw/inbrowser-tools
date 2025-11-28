@@ -1,18 +1,4 @@
 ---
-const navItems = [
-  { href: "/", text: "首页" },
-  { href: "/colors", text: "颜色转换" },
-  { href: "/uri-tools", text: "URI 编码/解码" },
-  { href: "/query-to-json", text: "查询参数转 JSON" },
-  { href: "/format-json", text: "JSON 格式化" },
-  { href: "/escape-convert", text: "字符转义工具" },
-  { href: "/tex-table-to-other", text: "Tex 表格转换" },
-  { href: "/hash", text: "Hash" },
-  { href: "/img-hide", text: "光棱坦克" },
-  { href: "/time-gap", text: "时间差计算" },
-  { href: "/monochrome-image", text: "图像去色" },
-];
-
 interface NaviCateItem {
   cate: string;
   text: string;
@@ -30,7 +16,7 @@ const navCateItems: NaviCateItem[] = [
     text: "Image",
     children: [
       { href: "/img-hide", text: "光棱坦克" },
-      { href: "/monochrome-image", text: "图像去色" },
+      { href: "/monochrome-image", text: "图像去色/反色" },
       { href: "/colors", text: "颜色转换" },
     ],
   },

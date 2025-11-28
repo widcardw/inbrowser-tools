@@ -31,7 +31,7 @@
 /* 定义暗色模式变量 */
 [data-theme="dark"] {
   --background: 222, 21%, 12%;
-  --bg-secondary: hsl(222, 21%, 36%);
+  --bg-secondary: 222, 21%, 36%;
   --foreground: 210 40% 98%;
 
   --primary: 210 40% 98%;
