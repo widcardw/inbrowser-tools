@@ -311,7 +311,7 @@ const ImgReveal: Component = () => {
       <label>
         <input
           type="file"
-          accept="images/*"
+          accept="image/*"
           onChange={(e) => {
             // setFile(e.target.files?.[0])
             loadImage(e.target.files?.[0]).then((res) => {

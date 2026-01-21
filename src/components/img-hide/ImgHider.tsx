@@ -242,7 +242,7 @@ const ImgHider: Component = () => {
           class="max-w-15rem"
           id="ori-img"
           type="file"
-          accept="images/*"
+          accept="image/*"
           onChange={(e) => setImg1(e.target.files?.[0])}
         />
         <code class="text-sm">{img1() ? calcFileSize(img1()?.size) : ''}</code>
@@ -253,7 +253,7 @@ const ImgHider: Component = () => {
           class="max-w-15rem"
           id="hid-img"
           type="file"
-          accept="images/*"
+          accept="image/*"
           onChange={(e) => setImg2(e.target.files?.[0])}
         />
         <code class="text-sm">{img2() ? calcFileSize(img2()?.size) : ''}</code>
