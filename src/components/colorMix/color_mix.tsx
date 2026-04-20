@@ -7,11 +7,13 @@ const ColorMixer: Component = () => {
 
   const hexToRgb = (hex: string) => {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-    return result ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16)
-    } : null
+    return result
+      ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16),
+        }
+      : null
   }
 
   const interpolate = (start: number, end: number, t: number) => {
@@ -21,13 +23,13 @@ const ColorMixer: Component = () => {
   const mixedColor = createMemo(() => {
     const startRgb = hexToRgb(startColor())
     const endRgb = hexToRgb(endColor())
-    
+
     if (!startRgb || !endRgb) return '#000000'
-    
+
     const r = interpolate(startRgb.r, endRgb.r, alpha())
     const g = interpolate(startRgb.g, endRgb.g, alpha())
     const b = interpolate(startRgb.b, endRgb.b, alpha())
-    
+
     return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
   })
 
@@ -74,9 +76,7 @@ const ColorMixer: Component = () => {
       </div>
 
       <div class="input-section">
-        <label class="block text-sm font-medium mb-2">
-          Alpha: {alpha().toFixed(2)}
-        </label>
+        <label class="block text-sm font-medium mb-2">Alpha: {alpha().toFixed(2)}</label>
         <input
           type="range"
           min="0"

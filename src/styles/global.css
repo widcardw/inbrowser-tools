@@ -29,7 +29,7 @@
 }
 
 /* 定义暗色模式变量 */
-[data-theme="dark"] {
+[data-theme='dark'] {
   --background: 222, 21%, 12%;
   --bg-secondary: 222, 21%, 36%;
   --foreground: 210 40% 98%;
@@ -55,7 +55,7 @@
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  font-family: "DM Sans", sans-serif;
+  font-family: 'DM Sans', sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -73,36 +73,38 @@ a:hover {
 }
 
 /* input 基础样式 */
-input[type="text"] {
+input[type='text'] {
   background-color: transparent;
   border: 2px solid hsl(var(--secondary));
   border-radius: 4px;
   padding: 0.6rem 0.8rem;
   font-size: 1rem;
   color: hsl(var(--foreground));
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 /* input 聚焦状态 */
-input[type="text"]:focus {
+input[type='text']:focus {
   outline: none;
   border-color: hsl(var(--accent));
   box-shadow: 0 0 0 2px hsla(var(--accent), 0.2);
 }
 
 /* input 禁用状态 */
-input[type="text"]:disabled {
+input[type='text']:disabled {
   border-color: hsl(var(--muted));
   color: hsl(var(--muted-foreground));
   cursor: not-allowed;
 }
 
 /* 暗色模式下的 input 样式 */
-[data-theme="dark"] input[type="text"] {
+[data-theme='dark'] input[type='text'] {
   border-color: hsl(var(--secondary));
 }
 
-[data-theme="dark"] input[type="text"]:focus {
+[data-theme='dark'] input[type='text']:focus {
   border-color: hsl(var(--accent));
   box-shadow: 0 0 0 2px hsla(var(--accent), 0.4);
 }
@@ -147,12 +149,12 @@ h6 {
 }
 
 /* 暗色模式下的 h1 - h6 样式微调 */
-[data-theme="dark"] h1,
-[data-theme="dark"] h2,
-[data-theme="dark"] h3,
-[data-theme="dark"] h4,
-[data-theme="dark"] h5,
-[data-theme="dark"] h6 {
+[data-theme='dark'] h1,
+[data-theme='dark'] h2,
+[data-theme='dark'] h3,
+[data-theme='dark'] h4,
+[data-theme='dark'] h5,
+[data-theme='dark'] h6 {
   color: hsl(var(--foreground));
 }
 

@@ -1,4 +1,10 @@
-import { defineConfig, presetIcons, presetWebFonts, transformerDirectives, presetWind3 } from 'unocss'
+import {
+  defineConfig,
+  presetIcons,
+  presetWebFonts,
+  transformerDirectives,
+  presetWind3,
+} from 'unocss'
 
 export default defineConfig({
   presets: [
@@ -12,15 +18,13 @@ export default defineConfig({
       },
     }),
   ],
-  transformers: [
-    transformerDirectives(),
-  ],
+  transformers: [transformerDirectives()],
   theme: {
     colors: {
       background: 'hsl(var(--background))',
       'background-secondary': 'hsl(var(--bg-secondary))',
       foreground: 'hsl(var(--foreground))',
-      
+
       primary: {
         DEFAULT: 'hsl(var(--primary))',
         foreground: 'hsl(var(--primary-foreground))',

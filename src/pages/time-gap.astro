@@ -149,7 +149,8 @@ import '../styles/tools-common.css';
       const exprTimeRangeEl = document.getElementById('exprTimeRange')!;
 
       function parseTime(timeStr: string) {
-        if (!timeStr.trim()) return null;
+        timeStr = timeStr.trim()
+        if (!timeStr) return null;
         
         // 尝试多种时间格式解析
         const formats = [
