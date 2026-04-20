@@ -47,15 +47,15 @@ import '../styles/tools-common.css';
           <h2 class="text-xl font-semibold mb-4 text-center">计算结果</h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
             <div class="bg-blue-100 p-4 rounded">
-              <div id="milliseconds" class="text-2xl font-bold text-blue-800"></div>
+              <div id="milliseconds" class="text-2xl font-bold text-blue-800 cursor-pointer"></div>
               <div class="text-gray-600">毫秒</div>
             </div>
             <div class="bg-green-100 p-4 rounded">
-              <div id="seconds" class="text-2xl font-bold text-green-800"></div>
+              <div id="seconds" class="text-2xl font-bold text-green-800 cursor-pointer"></div>
               <div class="text-gray-600">秒</div>
             </div>
             <div class="bg-purple-100 p-4 rounded">
-              <div id="minutes" class="text-2xl font-bold text-purple-800"></div>
+              <div id="minutes" class="text-2xl font-bold text-purple-800 cursor-pointer"></div>
               <div class="text-gray-600">分钟</div>
             </div>
           </div>
@@ -94,15 +94,15 @@ import '../styles/tools-common.css';
           <h3 class="text-lg font-medium mb-2 text-center">计算结果</h3>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
             <div class="bg-blue-100 p-4 rounded">
-              <div id="exprMilliseconds" class="text-2xl font-bold text-blue-800"></div>
+              <div id="exprMilliseconds" class="text-2xl font-bold text-blue-800 cursor-pointer"></div>
               <div class="text-gray-600">毫秒</div>
             </div>
             <div class="bg-green-100 p-4 rounded">
-              <div id="exprSeconds" class="text-2xl font-bold text-green-800"></div>
+              <div id="exprSeconds" class="text-2xl font-bold text-green-800 cursor-pointer"></div>
               <div class="text-gray-600">秒</div>
             </div>
             <div class="bg-purple-100 p-4 rounded">
-              <div id="exprMinutes" class="text-2xl font-bold text-purple-800"></div>
+              <div id="exprMinutes" class="text-2xl font-bold text-purple-800 cursor-pointer"></div>
               <div class="text-gray-600">分钟</div>
             </div>
           </div>
@@ -133,8 +133,17 @@ import '../styles/tools-common.css';
       const errorDiv = document.getElementById('error')!;
       const successDiv = document.getElementById('success')!;
       const millisecondsEl = document.getElementById('milliseconds')!;
+      millisecondsEl.addEventListener('click', (e) => {
+        window.navigator.clipboard.writeText((e.target as HTMLDivElement).textContent)
+      })
       const secondsEl = document.getElementById('seconds')!;
+      secondsEl.addEventListener('click', (e) => {
+        window.navigator.clipboard.writeText((e.target as HTMLDivElement).textContent)
+      })
       const minutesEl = document.getElementById('minutes')!;
+      minutesEl.addEventListener('click', (e) => {
+        window.navigator.clipboard.writeText((e.target as HTMLDivElement).textContent)
+      })
       const timeRangeEl = document.getElementById('timeRange')!;
 
       // 新增的表达式相关元素
@@ -144,8 +153,17 @@ import '../styles/tools-common.css';
       const expressionErrorDiv = document.getElementById('expressionError')!;
       const expressionSuccessDiv = document.getElementById('expressionSuccess')!;
       const exprMillisecondsEl = document.getElementById('exprMilliseconds')!;
+      exprMillisecondsEl.addEventListener('click', (e) => {
+        window.navigator.clipboard.writeText((e.target as HTMLDivElement).textContent)
+      })
       const exprSecondsEl = document.getElementById('exprSeconds')!;
+      exprSecondsEl.addEventListener('click', (e) => {
+        window.navigator.clipboard.writeText((e.target as HTMLDivElement).textContent)
+      })
       const exprMinutesEl = document.getElementById('exprMinutes')!;
+      exprMinutesEl.addEventListener('click', (e) => {
+        window.navigator.clipboard.writeText((e.target as HTMLDivElement).textContent)
+      })
       const exprTimeRangeEl = document.getElementById('exprTimeRange')!;
 
       function parseTime(timeStr: string) {
@@ -231,7 +249,7 @@ import '../styles/tools-common.css';
         millisecondsEl.textContent = diffMs.toLocaleString();
         secondsEl.textContent = diffSeconds.toLocaleString();
         minutesEl.textContent = diffMinutes.toLocaleString(undefined, { maximumFractionDigits: 2 });
-        timeRangeEl.textContent = `从 ${t1.toString()} 到 ${t2.toString()}`;
+        timeRangeEl.textContent = `从 ${t1.toLocaleString()} 到 ${t2.toLocaleString()}`;
       }
 
       // 解析表达式中的时间
