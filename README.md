@@ -1,53 +1,126 @@
-# InBrowser App
+# InBrowser Tools
 
-一个基于 **Astro** + **SolidJS** + **UnoCSS** 构建的浏览器端工具集合。所有工具均在浏览器本地运行，无需后端服务，数据不上传服务器。
+A collection of browser-based utility tools built with Astro. All processing happens client-side - your data never leaves your browser.
 
-## 🧰 工具列表
+## 🛠️ Available Tools
 
-| 工具                                         | 说明                                           |
-| -------------------------------------------- | ---------------------------------------------- |
-| [Color Converter](/colors)                   | 颜色格式转换，支持 HEX、RGB、HSL 等格式互转    |
-| [Color Mix](/colors)                         | 颜色混合工具                                   |
-| [Query String ↔ JSON](/query-to-json)        | URL 查询字符串与 JSON 互转                     |
-| [URI Encode/Decode](/uri-tools)              | URI 编解码                                     |
-| [Format JSON](/format-json)                  | JSON 格式化与压缩                              |
-| [Escape Conversion](/escape-convert)         | 转义字符转换                                   |
-| [LaTeX Table Converter](/tex-table-to-other) | LaTeX 表格与其他格式互转                       |
-| [Hash Calculator](/hash)                     | 哈希计算（MD5）                                |
-| [Image Steganography](/img-hide)             | 图片隐写（光棱坦克），将图片隐藏到另一张图片中 |
-| [Time Difference](/time-gap)                 | 时间差计算                                     |
-| [Image Monochrome](/monochrome-image)        | 图像去色与反色处理                             |
+### Color Tools
+- **Color Converter** - Convert colors between different formats (RGB, HEX, HSL, etc.)
+- **Color Mixer** - Blend colors together to create new color combinations
 
-## ✨ 特性
+### Data Formatting
+- **JSON Formatter** - Format, beautify, and validate JSON data with customizable indentation and key sorting
+- **Query String to JSON** - Convert URL query strings to JSON format
+- **URI Encoder/Decoder** - Encode and decode URI components
+- **Escape Converter** - Handle escape character conversions
 
-- **纯浏览器端运行** — 所有计算在本地完成，无后端依赖
-- **隐私安全** — 数据不上传，图片、文本等均在本地处理
-- **响应式设计** — 适配桌面与移动端
-- **暗色主题支持** — 跟随系统主题自动切换
+### Image Tools
+- **Image Desaturate/Invert** - Convert images to grayscale or invert colors
+- **光棱坦克 (Prism Tank)** - Hide images within other images using steganography
 
-## 🚀 开发
+### Text & Hash
+- **Hash Calculator** - Calculate hash values for text input
+- **TeX Table Converter** - Convert TeX tables to other formats
+
+### Time
+- **Time Gap Calculator** - Calculate time differences (时间差)
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- pnpm
+
+### Installation
 
 ```sh
-# 安装依赖
 pnpm install
+```
 
-# 启动开发服务器
+### Development
+
+```sh
 pnpm dev
+```
 
-# 构建生产版本
+Starts the development server at `localhost:4321`
+
+### Build
+
+```sh
 pnpm build
+```
 
-# 本地预览生产构建
+Builds the production site to `./dist/`
+
+### Preview
+
+```sh
 pnpm preview
 ```
 
-## 🛠️ 技术栈
+Preview the production build locally before deploying.
 
-| 技术                                         | 用途                  |
-| -------------------------------------------- | --------------------- |
-| [Astro](https://astro.build)                 | 静态站点框架          |
-| [SolidJS](https://www.solidjs.com)           | 交互式 UI 组件        |
-| [UnoCSS](https://unocss.dev)                 | 原子化 CSS 引擎       |
-| [TypeScript](https://www.typescriptlang.org) | 类型安全              |
-| [Oxlint](https://oxc.rs)                     | 代码检查与格式化      |
-| [Iconify](https://iconify.design)            | 图标库（Remix Icons） |
+## 🧰 Tech Stack
+
+- **Framework**: [Astro](https://astro.build/) v6
+- **UI Components**: [SolidJS](https://www.solidjs.com/)
+- **Styling**: [UnoCSS](https://unocss.dev/)
+- **Linting**: [oxlint](https://oxc.rs/docs/guide/usage/linter.html)
+- **Formatting**: [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html)
+- **Package Manager**: pnpm
+
+## 📁 Project Structure
+
+```text
+/
+├── public/
+│   └── favicon.svg
+├── src/
+│   ├── assets/
+│   ├── components/
+│   │   ├── colorConverter/
+│   │   ├── colorMix/
+│   │   ├── copy/
+│   │   ├── hash-calc/
+│   │   ├── img-hide/
+│   │   ├── Header.astro
+│   │   ├── Sidebar.astro
+│   │   ├── ThemeIcon.astro
+│   │   └── Welcome.astro
+│   ├── layouts/
+│   │   └── PageLayout.astro
+│   ├── pages/
+│   │   ├── index.astro
+│   │   ├── colors.astro
+│   │   ├── format-json.astro
+│   │   ├── hash.astro
+│   │   ├── uri-tools.astro
+│   │   └── ... (other tool pages)
+│   └── styles/
+│       └── global.css
+├── astro.config.ts
+├── package.json
+├── tsconfig.json
+└── uno.config.ts
+```
+
+## 🔒 Privacy
+
+All tools run entirely in your browser. No data is sent to any server. Your input stays on your device.
+
+## 📝 Scripts
+
+| Command | Action |
+|:--------|:-------|
+| `pnpm install` | Install dependencies |
+| `pnpm dev` | Start development server at `localhost:4321` |
+| `pnpm build` | Build for production to `./dist/` |
+| `pnpm preview` | Preview production build locally |
+| `pnpm lint:fix` | Run oxlint with auto-fix |
+| `pnpm format` | Format code with oxfmt |
+
+## 📄 License
+
+MIT

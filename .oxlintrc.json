@@ -6,5 +6,5 @@
   "rules": {
     "eslint/no-unused-vars": "error"
   },
-  "ignorePatterns": ["dist/*", "node_modules/*", "build/*", ".ai-docs/*", "bindings/*"]
+  "ignorePatterns": ["dist/*", "node_modules/*", "build/*", ".ai-docs/*"]
 }

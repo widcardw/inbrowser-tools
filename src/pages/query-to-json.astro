@@ -79,7 +79,7 @@ import '../styles/tools-common.css'
       }
 
       // 处理嵌套对象语法 user[name]=Tom
-      const matches = key.match(/^([^\[]+)\[([^\]]*)\]$/);
+      const matches = key.match(/^([^[]+)\[([^\]]*)\]$/);
       if (matches) {
         const [, objKey, propKey] = matches;
         if (!params[objKey]) {
