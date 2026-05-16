@@ -9,14 +9,12 @@ def brightness(pixel, factor):
     return pixel
 ```
 
-
 ```py
 # 对比度调整
 def contrast(pixel, factor):
     pixel.rgb = (v - 128) * factor + 128
     return pixel
 ```
-
 
 ```py
 if (x + y) % 2 == 0:

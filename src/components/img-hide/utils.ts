@@ -12,9 +12,7 @@ function calcFileSize(s: number | null | undefined) {
   return `${(s / 1073741824).toFixed(1)} GB`
 }
 
-async function loadImage(
-  file: File | null | undefined,
-): Promise<HTMLImageElement> {
+async function loadImage(file: File | null | undefined): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     if (file === null || file === undefined) return null
     const img = new Image()
@@ -36,14 +34,9 @@ function adjustPixelBrightnessContrast(
   const brightB = b * brightnessFactor
 
   // 再应用对比度调整 (对比度公式: (pixel - 128) * contrast + 128)
-  const adjustContrast = (v: number) =>
-    Math.min(255, Math.max(0, (v - 128) * contrastFactor + 128))
+  const adjustContrast = (v: number) => Math.min(255, Math.max(0, (v - 128) * contrastFactor + 128))
 
-  return [
-    adjustContrast(brightR),
-    adjustContrast(brightG),
-    adjustContrast(brightB),
-  ]
+  return [adjustContrast(brightR), adjustContrast(brightG), adjustContrast(brightB)]
 }
 
 function calcFactors(
@@ -68,12 +61,7 @@ function isUndefined(obj: any): obj is undefined {
   return obj === undefined || obj === null
 }
 
-function toTargetSize(
-  width: number,
-  height: number,
-  targetWidth: number,
-  targetHeight: number,
-) {
+function toTargetSize(width: number, height: number, targetWidth: number, targetHeight: number) {
   const targetAspect = targetWidth / targetHeight
   const aspect = width / height
   const sub = targetAspect - aspect

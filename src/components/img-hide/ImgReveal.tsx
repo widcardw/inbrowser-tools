@@ -98,26 +98,14 @@ class ExposureAdjuster {
     this.gl.linkProgram(this.program)
 
     if (!this.gl.getProgramParameter(this.program, this.gl.LINK_STATUS)) {
-      console.error(
-        'Unable to initialize shader program:',
-        this.gl.getProgramInfoLog(this.program),
-      )
+      console.error('Unable to initialize shader program:', this.gl.getProgramInfoLog(this.program))
       return
     }
 
     // Get attribute and uniform locations
-    this.positionAttributeLocation = this.gl.getAttribLocation(
-      this.program,
-      'aPosition',
-    )
-    this.texCoordAttributeLocation = this.gl.getAttribLocation(
-      this.program,
-      'aTexCoord',
-    )
-    this.exposureUniformLocation = this.gl.getUniformLocation(
-      this.program,
-      'uExposure',
-    )!
+    this.positionAttributeLocation = this.gl.getAttribLocation(this.program, 'aPosition')
+    this.texCoordAttributeLocation = this.gl.getAttribLocation(this.program, 'aTexCoord')
+    this.exposureUniformLocation = this.gl.getUniformLocation(this.program, 'uExposure')!
   }
 
   loadShader(type: GLenum, source: string) {
@@ -126,10 +114,7 @@ class ExposureAdjuster {
     this.gl.compileShader(shader)
 
     if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS)) {
-      console.error(
-        'An error occurred compiling the shaders:',
-        this.gl.getShaderInfoLog(shader),
-      )
+      console.error('An error occurred compiling the shaders:', this.gl.getShaderInfoLog(shader))
       this.gl.deleteShader(shader)
       return null
     }
@@ -145,11 +130,7 @@ class ExposureAdjuster {
     // Rectangle vertices (covering entire canvas)
     const positions = [-1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0]
 
-    this.gl.bufferData(
-      this.gl.ARRAY_BUFFER,
-      new Float32Array(positions),
-      this.gl.STATIC_DRAW,
-    )
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(positions), this.gl.STATIC_DRAW)
 
     // Create a buffer for the texture coordinates
     this.texCoordBuffer = this.gl.createBuffer()
@@ -167,11 +148,7 @@ class ExposureAdjuster {
       0.0, // Top right
     ]
 
-    this.gl.bufferData(
-      this.gl.ARRAY_BUFFER,
-      new Float32Array(texCoords),
-      this.gl.STATIC_DRAW,
-    )
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(texCoords), this.gl.STATIC_DRAW)
   }
 
   loadImage(imageSrc: string) {
@@ -187,26 +164,10 @@ class ExposureAdjuster {
       this.gl.bindTexture(this.gl.TEXTURE_2D, this.imageTexture)
 
       // Set texture parameters
-      this.gl.texParameteri(
-        this.gl.TEXTURE_2D,
-        this.gl.TEXTURE_WRAP_S,
-        this.gl.CLAMP_TO_EDGE,
-      )
-      this.gl.texParameteri(
-        this.gl.TEXTURE_2D,
-        this.gl.TEXTURE_WRAP_T,
-        this.gl.CLAMP_TO_EDGE,
-      )
-      this.gl.texParameteri(
-        this.gl.TEXTURE_2D,
-        this.gl.TEXTURE_MIN_FILTER,
-        this.gl.LINEAR,
-      )
-      this.gl.texParameteri(
-        this.gl.TEXTURE_2D,
-        this.gl.TEXTURE_MAG_FILTER,
-        this.gl.LINEAR,
-      )
+      this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE)
+      this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE)
+      this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR)
+      this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR)
 
       // Upload image to texture
       this.gl.texImage2D(
@@ -243,26 +204,12 @@ class ExposureAdjuster {
     // Bind position buffer
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer)
     this.gl.enableVertexAttribArray(this.positionAttributeLocation)
-    this.gl.vertexAttribPointer(
-      this.positionAttributeLocation,
-      2,
-      this.gl.FLOAT,
-      false,
-      0,
-      0,
-    )
+    this.gl.vertexAttribPointer(this.positionAttributeLocation, 2, this.gl.FLOAT, false, 0, 0)
 
     // Bind texture coordinate buffer
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.texCoordBuffer)
     this.gl.enableVertexAttribArray(this.texCoordAttributeLocation)
-    this.gl.vertexAttribPointer(
-      this.texCoordAttributeLocation,
-      2,
-      this.gl.FLOAT,
-      false,
-      0,
-      0,
-    )
+    this.gl.vertexAttribPointer(this.texCoordAttributeLocation, 2, this.gl.FLOAT, false, 0, 0)
 
     // Bind texture
     this.gl.activeTexture(this.gl.TEXTURE0)

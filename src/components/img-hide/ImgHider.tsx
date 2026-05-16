@@ -1,11 +1,4 @@
-import {
-  type Component,
-  Show,
-  createEffect,
-  createMemo,
-  createSignal,
-  on,
-} from 'solid-js'
+import { type Component, Show, createEffect, createMemo, createSignal, on } from 'solid-js'
 import {
   adjustPixelBrightnessContrast,
   calcFactors,
@@ -107,12 +100,8 @@ const ImgHider: Component = () => {
       setWarningText('请选择一种缩放方式')
       return
     }
-    const oriData = oriCanvas
-      .getContext('2d')!
-      .getImageData(0, 0, width, height)
-    const hidData = hidCanvas
-      .getContext('2d')!
-      .getImageData(0, 0, width, height)
+    const oriData = oriCanvas.getContext('2d')!.getImageData(0, 0, width, height)
+    const hidData = hidCanvas.getContext('2d')!.getImageData(0, 0, width, height)
 
     const result = ctx.createImageData(width, height)
     for (let i = 0; i < oriData?.data.length; i += 4) {
@@ -132,17 +121,8 @@ const ImgHider: Component = () => {
       let g = 0
       let b = 0
 
-      const [
-        oriBrightnessFactor,
-        hidBrightnessFactor,
-        oriContrastFactor,
-        hidContrastFactor,
-      ] = calcFactors(
-        oriBrightness(),
-        hidBrightness(),
-        oriContrast(),
-        hidBrightness(),
-      )
+      const [oriBrightnessFactor, hidBrightnessFactor, oriContrastFactor, hidContrastFactor] =
+        calcFactors(oriBrightness(), hidBrightness(), oriContrast(), hidBrightness())
 
       if ((x + y) % 2 === 0) {
         // 原图像素
@@ -327,11 +307,7 @@ const ImgHider: Component = () => {
 
       <div class="flex gap-4 flex-wrap">
         <button disabled class="btn text-sm">
-          {sizeMatch() === null
-            ? '尚未上传'
-            : sizeMatch()
-              ? '图像大小一致'
-              : '图像大小不一致'}
+          {sizeMatch() === null ? '尚未上传' : sizeMatch() ? '图像大小一致' : '图像大小不一致'}
         </button>
         <label class="radio-btn">
           <input
@@ -362,18 +338,10 @@ const ImgHider: Component = () => {
             {warningText()}
           </button>
         </Show>
-        <button
-          class="btn primary"
-          disabled={!imgGenerated()}
-          onClick={downloadImg}
-        >
+        <button class="btn primary" disabled={!imgGenerated()} onClick={downloadImg}>
           下载图片
         </button>
-        <button
-          class="btn primary"
-          disabled={!imgGenerated()}
-          onClick={copyImage}
-        >
+        <button class="btn primary" disabled={!imgGenerated()} onClick={copyImage}>
           {copyText()}
         </button>
       </div>

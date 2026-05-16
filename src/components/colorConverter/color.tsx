@@ -132,12 +132,7 @@ const ColorConverter: () => JSX.Element = () => {
         <div class="input-group">
           <label for="hslInput">HSL</label>
           <div class="input-with-copy">
-            <input
-              type="text"
-              id="hslInput"
-              value={hslColor()}
-              readOnly
-            />
+            <input type="text" id="hslInput" value={hslColor()} readOnly />
             <ClipboardCopy textToCopy={hslColor()}>Copy</ClipboardCopy>
           </div>
         </div>
