@@ -156,32 +156,6 @@ import '../styles/tools-common.css'
 </script>
 
 <style>
-  /* 页面特定样式 */
-  .input-wrapper {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .output-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-  }
-
-  .examples {
-    margin-top: 1rem;
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .examples p {
-    margin: 0;
-    color: var(--muted-foreground);
-  }
-
   .example-btn {
     padding: 0.3rem 0.6rem;
     border: 1px solid hsl(var(--secondary));
@@ -197,14 +171,6 @@ import '../styles/tools-common.css'
   }
 
   @media (max-width: 768px) {
-    .input-wrapper {
-      flex-direction: column;
-    }
-
-    .examples {
-      gap: 0.5rem;
-    }
-
     .example-btn {
       font-size: 0.75rem;
     }
